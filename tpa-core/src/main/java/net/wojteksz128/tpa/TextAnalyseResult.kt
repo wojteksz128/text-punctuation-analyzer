@@ -6,15 +6,15 @@ class TextAnalyseResult(val text: String) {
     val punctuationMarks = mutableListOf<PunctuationMark>()
     val words = mutableListOf<Word>()
 
-    class PunctuationMark private constructor(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt) {
-        override fun get() = text.substring(startAt, endAt)
+    class PunctuationMark(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt) {
+        override fun get() = text.substring(startAt, endAt + 1)
     }
 
-    class Word private constructor(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt) {
-        override fun get() = text.substring(startAt, endAt)
+    class Word(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt) {
+        override fun get() = text.substring(startAt, endAt + 1)
     }
 }
 
-abstract class TextPart protected constructor(val text: String, val startAt: Int, val endAt: Int) {
+abstract class TextPart(val text: String, val startAt: Int, val endAt: Int) {
     abstract fun get(): String
 }
