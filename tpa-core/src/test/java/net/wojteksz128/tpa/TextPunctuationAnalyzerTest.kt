@@ -1,6 +1,7 @@
 package net.wojteksz128.tpa
 
 import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.text.TestText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -10,26 +11,30 @@ internal class TextPunctuationAnalyzerTest {
 
     @Test
     fun `Analyze empty text returns empty analyse result`() {
-        val result = analyzer.analyze("")
-        assertEquals("", result.text)
-        assertTrue { result.textParts.isEmpty() }
-        assertTrue { result.words.isEmpty() }
-        assertTrue { result.punctuationMarks.isEmpty() }
+        val text = TestText.builder().build()
+
+        val result = analyzer.analyze(text.getFullText())
+        assertEquals(text.getFullText(), result.text)
+        assertTrue { result.textParts.size == text.getPartsNo() }
+        assertTrue { result.words.size == text.getWordsNo() }
+        assertTrue { result.punctuationMarks.size == text.getPunctuationsNo() }
     }
 
     @Test
     fun `Analyze text with one word returns result with recognized one word`() {
-        val text = "Test"
+        val text = TestText.builder().word("Test").build()
 
-        val result = analyzer.analyze(text)
+        val result = analyzer.analyze(text.getFullText())
 
-        assertEquals(text, result.text)
+        assertEquals(text.getFullText(), result.text)
 
-        assertTrue { result.textParts.size == 1 }
+        assertTrue { result.textParts.size == text.getPartsNo() }
         assertTrue { result.textParts.first() is TextAnalyseResult.Word }
-        assertTrue { result.textParts.first().get() == text }
+        assertTrue { result.textParts.first().get() == text.getParts().first().getText() }
 
-        assertTrue { result.words.size == 1 }
+        assertTrue { result.words.size == text.getWordsNo() }
         assertTrue { result.words.first() == result.textParts.first() }
+
+        assertTrue { result.punctuationMarks.size == text.getPunctuationsNo() }
     }
 }
