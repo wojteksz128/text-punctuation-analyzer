@@ -18,6 +18,8 @@ class TestText private constructor(private val parts: List<TestTextPart>) {
                 parts += TestSeparator(languageAlphabet.getSeparator())
             parts += TestWord(word)
         }
+
+        fun dot() = apply { parts += TestPunctuation(".") }
     }
 }
 

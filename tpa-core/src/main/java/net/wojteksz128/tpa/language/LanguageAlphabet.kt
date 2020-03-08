@@ -4,4 +4,5 @@ interface LanguageAlphabet {
     fun getLetters(): CharArray
     fun getSeparator(): String
     fun getPartsPattern(): Regex
+    fun getPunctuations(): List<String>
 }
