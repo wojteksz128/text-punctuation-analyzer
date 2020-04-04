@@ -1,11 +1,10 @@
 package net.wojteksz128.tpa
 
-import net.wojteksz128.tpa.language.LanguageAlphabet
 import net.wojteksz128.tpa.text.PunctuationMark
 import net.wojteksz128.tpa.text.Word
 import net.wojteksz128.tpa.text.split.TextDivider
 
-class TextPunctuationAnalyzer(private val languageAlphabet: LanguageAlphabet, private val textDivider: TextDivider) {
+class TextPunctuationAnalyzer(private val textDivider: TextDivider) {
 
     fun analyze(text: String): TextAnalyseResult {
         val result = TextAnalyseResult(text)
