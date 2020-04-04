@@ -6,7 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="text-punctuation-analyzer" />
+        <module name="tpa-polish-lang" />
+        <module name="tpa-core" />
       </profile>
     </annotationProcessing>
   </component>
