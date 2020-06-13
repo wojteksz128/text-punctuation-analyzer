@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>tpa-utils</artifactId>
+        <groupId>net.wojteksz128</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <name>Text Punctuation Analyzer &gt; Utils &gt; JPL</name>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tpa-jpl</artifactId>
+
+    <dependencies>
+        <!--
+            Od > 7.4.1 JPL dodawany razem z SWI-PROLOG. Konieczne dodanie go do repozytorium przez komendę, np.:
+            mvn install:install-file \
+                -Dfile=/usr/lib/swi-prolog/lib/jpl-7.6.0.jar \
+                -DgroupId=jpl \
+                -DartifactId=jpl \
+                -Dversion=7.6.0 \
+                -Dpackaging=jar \
+                -DgeneratePom=true
+         -->
+        <dependency>
+            <groupId>jpl</groupId>
+            <artifactId>jpl</artifactId>
+            <version>7.6.0</version>
+        </dependency>
+    </dependencies>
+
+</project>
