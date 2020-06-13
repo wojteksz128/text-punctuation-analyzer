@@ -12,21 +12,17 @@
 
     <artifactId>tpa-jpl</artifactId>
 
+    <properties>
+        <jpl.path>/dev/null</jpl.path>
+    </properties>
+
     <dependencies>
-        <!--
-            Od > 7.4.1 JPL dodawany razem z SWI-PROLOG. Konieczne dodanie go do repozytorium przez komendę, np.:
-            mvn install:install-file \
-                -Dfile=/usr/lib/swi-prolog/lib/jpl-7.6.0.jar \
-                -DgroupId=jpl \
-                -DartifactId=jpl \
-                -Dversion=7.6.0 \
-                -Dpackaging=jar \
-                -DgeneratePom=true
-         -->
         <dependency>
             <groupId>jpl</groupId>
             <artifactId>jpl</artifactId>
             <version>7.6.0</version>
+            <scope>system</scope>
+            <systemPath>${jpl.path}</systemPath>
         </dependency>
     </dependencies>
 
