@@ -13,7 +13,7 @@
     <artifactId>tpa-jpl</artifactId>
 
     <properties>
-        <jpl.path>/dev/null</jpl.path>
+        <jpl.path>/usr/lib/swi-prolog/lib/jpl.jar</jpl.path>
     </properties>
 
     <dependencies>

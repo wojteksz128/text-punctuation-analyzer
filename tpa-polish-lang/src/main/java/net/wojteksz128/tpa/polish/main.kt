@@ -1,6 +1,7 @@
 package net.wojteksz128.tpa.polish
 
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
+import net.wojteksz128.tpa.utils.jpl.JPLInitializer
 
 /*
 * Examples:
@@ -12,6 +13,7 @@ import net.wojteksz128.tpa.TextPunctuationAnalyzer
 
 fun main(args: Array<String>) {
     val analyzer: TextPunctuationAnalyzer = PolishTextPunctuationAnalyzerImpl()
+    JPLInitializer.init()
 
     args.forEach { text ->
         println("----------")
