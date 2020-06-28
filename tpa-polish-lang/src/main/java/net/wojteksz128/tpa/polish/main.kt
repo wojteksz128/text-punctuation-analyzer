@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.polish
 
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
-import net.wojteksz128.tpa.utils.jpl.JPLInitializer
+import net.wojteksz128.tpa.utils.jpl.JPLInstance
 
 /*
 * Examples:
@@ -13,7 +13,7 @@ import net.wojteksz128.tpa.utils.jpl.JPLInitializer
 
 fun main(args: Array<String>) {
     val analyzer: TextPunctuationAnalyzer = PolishTextPunctuationAnalyzerImpl()
-    JPLInitializer.init()
+    val jplInstance = JPLInstance()
 
     args.forEach { text ->
         println("----------")
@@ -26,5 +26,8 @@ fun main(args: Array<String>) {
         1.rangeTo(recognizingText.length).forEach { _ -> print("\b \b") }
         println("\rRozpoznano:")
         result.textParts.forEach { println(" -\t${it.javaClass.simpleName} '${it.get()}' na pozycji ${it.startAt}-${it.endAt}") }
+
+        val analise = jplInstance.analise(text)
+        println("Czy istnieje rozwiązanie?: ${analise.hasSolution()}")
     }
 }
