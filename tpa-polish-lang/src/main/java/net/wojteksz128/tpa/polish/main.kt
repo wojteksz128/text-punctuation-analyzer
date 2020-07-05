@@ -28,6 +28,7 @@ fun main(args: Array<String>) {
         result.textParts.forEach { println(" -\t${it.javaClass.simpleName} '${it.get()}' na pozycji ${it.startAt}-${it.endAt}") }
 
         val analise = jplInstance.analise(text)
+        analise.allSolutions()
         println("Czy istnieje rozwiązanie?: ${analise.hasSolution()}")
     }
 }

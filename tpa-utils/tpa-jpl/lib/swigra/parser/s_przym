@@ -1,0 +1,57 @@
+% A somewhat ad-hoc dictionary of valence frames for adjectives
+%
+% Version 0
+%
+% Copyright © 2010 by Marcin Woliński
+%
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License version 3 as
+% published by the Free Software Foundation.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+% MA 02110-1301, USA 
+%
+% In addition, as a special exception, the copyright holder gives
+% permission to link the code of this program with the Morfeusz library
+% (see http://www.nlp.ipipan.waw.pl/~wolinski/morfeusz), and distribute
+% linked combinations including the two. You must obey the GNU General
+% Public License in all respects for all of the code used other than
+% Morfeusz. If you modify this file, you may extend this exception to
+% your version of the file, but you are not obligated to do so. If you
+% do not wish to do so, delete this exception statement from your
+% version.
+%
+chętny	cp(żeby)
+chętny	prepnp(do,gen)
+głodny	np(gen)
+gotowy	infp(_)
+należny	np(dat)
+niezbędny	np(dat)+cp(żeby)
+oburzony	cp(że)
+pełny	np(gen)
+pewien	cp(że)
+pewien	np(gen)
+pewny	cp(że)
+pewny	np(gen)
+potrzebny	np(dat)+cp(żeby)
+przeciwny	np(dat)
+przeciwny	ncp(dat,żeby)
+przekonany	cp(że)
+szczęśliwy	cp(że)
+wierny	np(dat)
+wierny	ncp(dat,że)
+wściekły	cp(że)
+zaangażowany	prepnp(w,acc)
+zadowolony	cp(że)
+zadowolony	prepncp(z,gen,że)
+zadowolony	prepnp(z,gen)
+zgodny	cp(że)
+żądny	np(gen)

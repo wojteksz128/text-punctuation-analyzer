@@ -7,21 +7,7 @@ import java.io.File
 class JPLInstance {
     init {
         val swigraPath = System.getProperty("swigra.path")
-        importPLScript(File("$swigraPath/birnam_run.pl"))
-        importPLScript(File("$swigraPath/birnam_dumpedges.pl"))
-        importPLScript(File("$swigraPath/gfjp_morfologia.pl"))
-        importPLScript(File("$swigraPath/gfjp_slowskr.pl"))
-        importPLScript(File("$swigraPath/gfjp_slowpart.pl"))
-        importPLScript(File("$swigraPath/slowczas.pl"))
-        importPLScript(File("$swigraPath/slowrzecz.pl"))
-        importPLScript(File("$swigraPath/slowprzym.pl"))
-        importPLScript(File("$swigraPath/gfjp_analiza.pl"))
-        importPLScript(File("$swigraPath/gfjp_wymagania.pl"))
-        importPLScript(File("$swigraPath/birnam_sequences.pl"))
-        importPLScript(File("$swigraPath/gfjp2_warunki.pl"))
-        importPLScript(File("$swigraPath/gfjp2.pl"))
-        importPLScript(File("$swigraPath/gfjp2_arnoscint.pl"))
-        importPLScript(File("$swigraPath/gfjp_swidzinskify.pl"))
+        importPLScript(File("$swigraPath/swigra2_batch.pl"))
     }
 
     fun importPLScript(vararg scriptPath: File) {

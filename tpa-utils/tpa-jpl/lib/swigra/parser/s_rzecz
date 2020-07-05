@@ -1,0 +1,119 @@
+% A somewhat ad-hoc dictionary of valence frames for nouns
+%
+% Version 0
+%
+% Copyright © 2010 by Marcin Woliński
+%
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License version 3 as
+% published by the Free Software Foundation.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; if not, write to the Free Software
+% Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+% MA 02110-1301, USA 
+%
+%
+brzmienie	or
+chęć	infp(_)
+czas	cp(żeby)
+decyzja	prepnp(o,loc)
+dowód	cp(że)
+dowód	prepncp(na,acc,że)
+efekt	cp(że)
+efekt	ncp(gen,że)
+fakt	cp(że)
+idea	cp(że)
+idea	cp(żeby)
+idea	cp(int)
+handel	np(inst)
+koncepcja	cp(że)
+koncepcja	cp(żeby)
+koncepcja	cp(int)
+koncepcja	prepncp(na,acc,że)
+koncepcja	prepncp(na,acc,żeby)
+koncepcja	prepncp(na,acc,int)
+koncept	cp(że)
+koncept	cp(żeby)
+koncept	cp(int)
+koncept	prepncp(na,acc,że)
+koncept	prepncp(na,acc,żeby)
+koncept	prepncp(na,acc,int)
+książka	prepadjp(po,postp)
+lament	prepadjp(po,postp)
+list	prepadjp(po,postp)
+lot	np(inst)
+modlitwa	prepadjp(po,postp)
+możliwość	cp(że)
+możliwość	cp(żeby)
+myśl	cp(że)
+myśl	cp(żeby)
+nadzieja	infp(_)
+nadzieja	cp(że)
+nadzieja	cp(żeby)
+nadzieja	prepncp(na,acc,że)
+obawa	cp(że)
+obowiązek	infp(_)
+% być może bezokolicznik tylko przy „mieć okazję”
+okazja	infp(_)
+okazja	cp(żeby)
+odpowiedź	prepadjp(po,postp)
+piosenka	prepadjp(po,postp)
+poczucie	cp(że)
+podstawa	cp(żeby)
+podstawa	prepncp(do,gen,żeby)
+podróż	np(inst)
+polecenie	cp(żeby)
+pomoc	np(dat)
+pomysł	cp(że)
+pomysł	cp(żeby)
+pomysł	cp(int)
+pomysł	prepncp(na,acc,że)
+pomysł	prepncp(na,acc,żeby)
+pomysł	prepncp(na,acc,int)
+powód	cp(żeby)
+pozór	cp(że)
+prawdopodobieństwo	cp(że)
+prawo	infp(_)
+prezentacja	np(gen)+np(dat)
+przesłanka	cp(że)
+przesłanka	cp(żeby)
+przejazd	np(inst)
+przejażdżka	np(inst)
+przelot	np(inst)
+publikacja	prepncp(o,loc,że)
+pytanie	cp(int)
+rezultat	cp(że)
+rezultat	ncp(gen,że)
+różnica	cp(że)
+skutek	cp(że)
+skutek	ncp(gen,że)
+sprawa	np(gen)
+sprawa	cp(int)
+sprawa	cp(że)
+staranie	cp(żeby)
+sytuacja	cp(gdy)
+szansa	infp(_)
+szansa	cp(że)
+szansa	cp(żeby)
+tekst	prepadjp(po,postp)
+utwór	prepadjp(po,postp)
+wątpliwość	cp(int)
+wniosek	cp(że)
+wrażenie	cp(że)
+wynik	cp(że)
+wynik	ncp(gen,że)
+wysiłek	cp(żeby)
+zadowolenie	cp(że)
+zainteresowanie	np(inst)
+zamiar	infp(_)
+% „zarzut znęcania się” – niedzierżawczy dopełniacz chyba warto zaznaczyć?:
+zarzut	np(gen)
+złudzenie	cp(że)
+znak	cp(że)
