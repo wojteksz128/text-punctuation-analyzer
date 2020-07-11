@@ -12,6 +12,7 @@
     <modules>
         <module>tpa-core</module>
         <module>tpa-polish-lang</module>
+        <module>tpa-utils</module>
     </modules>
 
     <properties>
