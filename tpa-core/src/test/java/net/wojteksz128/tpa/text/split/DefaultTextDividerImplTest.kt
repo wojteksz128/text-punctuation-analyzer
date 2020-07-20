@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test
 
 internal class DefaultTextDividerImplTest {
     private val languageAlphabet = TestLanguageAlphabet()
-    private val textSplitter: TextDivider = DefaultTextDividerImpl(languageAlphabet)
+    private val classifier = DefaultClassifier()
+    private val textSplitter: TextDivider = DefaultTextDividerImpl(languageAlphabet, classifier)
 
     @Test
     fun `Analyze empty text returns empty analyse result`() {

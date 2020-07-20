@@ -10,12 +10,18 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tpa-morfeusz</artifactId>
+    <name>Text Punctuation Analyzer &gt; Utils &gt; Morfeusz</name>
 
     <properties>
         <morfeusz.path>/usr/share/java/jmorfeusz.jar</morfeusz.path>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>net.wojteksz128</groupId>
+            <artifactId>tpa-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>pl.sgjp</groupId>
             <artifactId>morfeusz</artifactId>

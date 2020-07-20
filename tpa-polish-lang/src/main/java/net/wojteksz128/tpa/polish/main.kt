@@ -1,8 +1,6 @@
 package net.wojteksz128.tpa.polish
 
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
-import net.wojteksz128.tpa.utils.morfeusz.MorfeuszTagDecode
-import pl.sgjp.morfeusz.Morfeusz
 
 /*
 * Examples:
@@ -14,7 +12,6 @@ import pl.sgjp.morfeusz.Morfeusz
 
 fun main(args: Array<String>) {
     val analyzer: TextPunctuationAnalyzer = PolishTextPunctuationAnalyzerImpl()
-    val instance: Morfeusz = Morfeusz.createInstance()
 
     args.forEach { text ->
         println("----------")
@@ -26,14 +23,10 @@ fun main(args: Array<String>) {
         val result = analyzer.analyze(text)
         1.rangeTo(recognizingText.length).forEach { _ -> print("\b \b") }
         println("\rRozpoznano:")
-        result.textParts.forEach {
-            println(" -\t${it.javaClass.simpleName} '${it.get()}' na pozycji ${it.startAt}-${it.endAt}")
-            val analyzed = instance.analyseAsList(it.get())
-            analyzed.forEach { morthInterpretation ->
-                println("\t -\t${morthInterpretation.orth}, ${morthInterpretation.lemma}, ${morthInterpretation.getTag(instance)}")
-                val decoded = MorfeuszTagDecode.decode(morthInterpretation.getTag(instance))
-                println("\t\t$decoded")
-            }
+        result.textParts.forEach { textPart ->
+            println(" -\t${textPart.javaClass.simpleName} '${textPart.get()}' na pozycji ${textPart.startAt}-${textPart.endAt} " +
+                    if (textPart.possibleCategories.isNotEmpty()) "sklasyfikowany jako:" else "bez klasyfikacji")
+            textPart.possibleCategories.forEach { println("\t\t$it") }
             println()
         }
     }
