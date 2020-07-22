@@ -1,5 +1,7 @@
 package net.wojteksz128.tpa.utils.morfeusz
 
+import net.wojteksz128.tpa.utils.morfeusz.PartOfSpeech.*
+
 object MorfeuszWordTags {
 
     /*
@@ -150,42 +152,42 @@ object MorfeuszWordTags {
     ))
 
     val classes = listOf(
-            GrammarClass("subst", "rzeczownik", listOf(wordNumber, wordCase, wordType)),
-            GrammarClass("depr", "rzeczownik deprecjatywny", listOf(wordNumber, wordCase, wordType)),
-            GrammarClass("num", "liczebnik główny", listOf(wordNumber, wordCase, wordType, wordAccommodability)),
-            GrammarClass("numcol", "liczebnik zbiorowy", listOf(wordNumber, wordCase, wordType, wordAccommodability)),
-            GrammarClass("adj", "przymiotnik", listOf(wordNumber, wordCase, wordType, wordGrade)),
-            GrammarClass("adja", "przymiotnik przyprzym.", listOf()),
-            GrammarClass("adjp", "przymiotnik poprzyimkowy", listOf()),
-            GrammarClass("adjc", "przymiotnik predykatywny", listOf()),
-            GrammarClass("adv", "przysłówek", listOf(wordGrade)),
-            GrammarClass("ppron12", "zaimek nietrzecioosobowy", listOf(wordNumber, wordCase, wordType, wordPerson, wordAccented)),
-            GrammarClass("ppron3", "zaimek trzecioosobowy", listOf(wordNumber, wordCase, wordType, wordPerson, wordAccented, wordPostPreposition)),
-            GrammarClass("siebie", "zaimek siebie", listOf(wordCase)),
-            GrammarClass("fin", "forma nieprzeszła", listOf(wordNumber, wordPerson, wordAspect)),
-            GrammarClass("bedzie", "forma przyszła być", listOf(wordNumber, wordPerson, wordAspect)),
-            GrammarClass("aglt", "aglutynant być", listOf(wordNumber, wordPerson, wordAspect, wordVocalicity)),
-            GrammarClass("praet", "pseudoimiesłów", listOf(wordNumber, wordType, wordAspect, wordAgglutination)),
-            GrammarClass("impt", "rozkaźnik", listOf(wordNumber, wordPerson, wordAspect)),
-            GrammarClass("imps", "bezosobnik", listOf(wordAspect)),
-            GrammarClass("inf", "bezokolicznik", listOf(wordAspect)),
-            GrammarClass("pcon", "im. przys. współczesny", listOf(wordAspect)),
-            GrammarClass("pant", "im. przys. uprzedni", listOf(wordAspect)),
-            GrammarClass("ger", "odsłownik", listOf(wordNumber, wordCase, wordType, wordAspect, wordDenial)),
-            GrammarClass("pact", "im. przym. czynny", listOf(wordNumber, wordCase, wordType, wordAspect, wordDenial)),
-            GrammarClass("ppas", "im. przym. bierny", listOf(wordNumber, wordCase, wordType, wordAspect, wordDenial)),
-            GrammarClass("winien", "winien", listOf(wordNumber, wordType, wordAspect)),
-            GrammarClass("pred", "predykatyw", listOf()),
-            GrammarClass("prep", "przyimek", listOf(wordCase)),
-            GrammarClass("conj", "spójnik współrzędny", listOf()),
-            GrammarClass("comp", "spójnik podrzędny", listOf()),
-            GrammarClass("qub", "kublik", listOf()),
-            GrammarClass("brev", "skrót", listOf()),
-            GrammarClass("burk", "burkinostka", listOf()),
-            GrammarClass("interj", "wykrzyknik", listOf()),
-            GrammarClass("interp", "interpunkcja", listOf()),
-            GrammarClass("xxx", "ciało obce", listOf()),
-            GrammarClass("ign", "forma nierozpoznana", listOf())
+            GrammarClass("subst", "rzeczownik", NOUN, listOf(wordNumber, wordCase, wordType)),
+            GrammarClass("depr", "rzeczownik deprecjatywny", NOUN, listOf(wordNumber, wordCase, wordType)),
+            GrammarClass("num", "liczebnik główny", NUMERAL, listOf(wordNumber, wordCase, wordType, wordAccommodability)),
+            GrammarClass("numcol", "liczebnik zbiorowy", NUMERAL, listOf(wordNumber, wordCase, wordType, wordAccommodability)),
+            GrammarClass("adj", "przymiotnik", ADJECTIVE, listOf(wordNumber, wordCase, wordType, wordGrade)),
+            GrammarClass("adja", "przymiotnik przyprzym.", ADJECTIVE, listOf()),
+            GrammarClass("adjp", "przymiotnik poprzyimkowy", ADJECTIVE, listOf()),
+            GrammarClass("adjc", "przymiotnik predykatywny", ADJECTIVE, listOf()),
+            GrammarClass("adv", "przysłówek", ADVERB, listOf(wordGrade)),
+            GrammarClass("ppron12", "zaimek nietrzecioosobowy", PRONOUN, listOf(wordNumber, wordCase, wordType, wordPerson, wordAccented)),
+            GrammarClass("ppron3", "zaimek trzecioosobowy", PRONOUN, listOf(wordNumber, wordCase, wordType, wordPerson, wordAccented, wordPostPreposition)),
+            GrammarClass("siebie", "zaimek siebie", PRONOUN, listOf(wordCase)),
+            GrammarClass("fin", "forma nieprzeszła", VERB, listOf(wordNumber, wordPerson, wordAspect)),
+            GrammarClass("bedzie", "forma przyszła być", VERB, listOf(wordNumber, wordPerson, wordAspect)),
+            GrammarClass("aglt", "aglutynant być", VERB, listOf(wordNumber, wordPerson, wordAspect, wordVocalicity)),
+            GrammarClass("praet", "pseudoimiesłów", VERB, listOf(wordNumber, wordType, wordAspect, wordAgglutination)),
+            GrammarClass("impt", "rozkaźnik", VERB, listOf(wordNumber, wordPerson, wordAspect)),
+            GrammarClass("imps", "bezosobnik", VERB, listOf(wordAspect)),
+            GrammarClass("inf", "bezokolicznik", VERB, listOf(wordAspect)),
+            GrammarClass("pcon", "im. przys. współczesny", VERB, listOf(wordAspect)),
+            GrammarClass("pant", "im. przys. uprzedni", VERB, listOf(wordAspect)),
+            GrammarClass("ger", "odsłownik", VERB, listOf(wordNumber, wordCase, wordType, wordAspect, wordDenial)),
+            GrammarClass("pact", "im. przym. czynny", VERB, listOf(wordNumber, wordCase, wordType, wordAspect, wordDenial)),
+            GrammarClass("ppas", "im. przym. bierny", VERB, listOf(wordNumber, wordCase, wordType, wordAspect, wordDenial)),
+            GrammarClass("winien", "winien", VERB, listOf(wordNumber, wordType, wordAspect)),
+            GrammarClass("pred", "predykatyw", OTHER, listOf()),
+            GrammarClass("prep", "przyimek", PREPOSITION, listOf(wordCase)),
+            GrammarClass("conj", "spójnik współrzędny", CONJUNCTION, listOf()),
+            GrammarClass("comp", "spójnik podrzędny", CONJUNCTION, listOf()),
+            GrammarClass("qub", "kublik", OTHER, listOf()),
+            GrammarClass("brev", "skrót", OTHER, listOf()),
+            GrammarClass("burk", "burkinostka", OTHER, listOf()),
+            GrammarClass("interj", "wykrzyknik", EXCLAMATION_MARK, listOf()),
+            GrammarClass("interp", "interpunkcja", OTHER, listOf()),
+            GrammarClass("xxx", "ciało obce", OTHER, listOf()),
+            GrammarClass("ign", "forma nierozpoznana", OTHER, listOf())
     )
 }
 

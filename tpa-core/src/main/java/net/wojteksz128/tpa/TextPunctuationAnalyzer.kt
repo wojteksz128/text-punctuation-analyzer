@@ -7,7 +7,7 @@ import net.wojteksz128.tpa.text.split.TextDivider
 
 open class TextPunctuationAnalyzer(private val textDivider: TextDivider) {
 
-    internal val validators = mutableListOf<TextValidator>()
+    val validators = mutableListOf<TextValidator>()
 
     fun analyze(text: String): TextAnalyseResult {
         val result = TextAnalyseResult(text)
