@@ -6,9 +6,9 @@ import net.wojteksz128.tpa.text.PunctuationMark
 import net.wojteksz128.tpa.text.Word
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvFileSource
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal class DotAtSentenceEndValidatorTest {
 
@@ -16,75 +16,22 @@ internal class DotAtSentenceEndValidatorTest {
     private val classifier = MorfeuszClassifier
     private val textDivider = DefaultTextDividerImpl(alphabet, classifier)
 
-    @Test
-    fun `Verification of empty string returns empty list of possible changes`() {
-        val example = prepareTextAnalyseResult("")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertTrue { possibleChanges.isEmpty() }
-    }
-
-    @Test
-    fun `Verification of text with only one_word sentence returns possible dot at the end of sentence`() {
-        val example = prepareTextAnalyseResult("Idę")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertEquals(1, possibleChanges.size)
-        assertEquals(example.text.length, possibleChanges.first().position)
-        assertEquals(".", possibleChanges.first().suggestedSign)
-    }
-
-    @Test
-    fun `Verification of text with only one_word sentence ended by dot returns empty list of possible changes`() {
-        val example = prepareTextAnalyseResult("Idę.")
+    @ParameterizedTest
+    @CsvFileSource(resources = ["/DASEV_correct.csv"], numLinesToSkip = 1)
+    fun `Verification returns empty list of possible changes`(text: String) {
+        val example = prepareTextAnalyseResult(text)
         val possibleChanges = DotAtSentenceEndValidator.validate(example)
         assertEquals(0, possibleChanges.size)
     }
 
-    @Test
-    fun `Verification of text with only two_word sentence begins with a noun returns possible dot at the end of sentence`() {
-        val example = prepareTextAnalyseResult("Ala idzie")
+    @ParameterizedTest
+    @CsvFileSource(resources = ["/DASEV_one_dot.csv"], numLinesToSkip = 1)
+    fun `Verification returns possible dot in list of possible changes`(text: String, position: Int) {
+        val example = prepareTextAnalyseResult(text)
         val possibleChanges = DotAtSentenceEndValidator.validate(example)
         assertEquals(1, possibleChanges.size)
-        assertEquals(example.text.length, possibleChanges.first().position)
+        assertEquals(position, possibleChanges.first().position)
         assertEquals(".", possibleChanges.first().suggestedSign)
-    }
-
-    @Test
-    fun `Verification of text with two_word sentence begins with a noun ended by dot returns empty list of possible changes`() {
-        val example = prepareTextAnalyseResult("Ala idzie.")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertEquals(0, possibleChanges.size)
-    }
-
-    @Test
-    fun `Verification of text with only two_word sentence begins with a verb returns possible dot at the end of sentence`() {
-        val example = prepareTextAnalyseResult("Idzie Ala")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertEquals(1, possibleChanges.size)
-        assertEquals(example.text.length, possibleChanges.first().position)
-        assertEquals(".", possibleChanges.first().suggestedSign)
-    }
-
-    @Test
-    fun `Verification of text with two_word sentence begins with a verb ended by dot returns empty list of possible changes`() {
-        val example = prepareTextAnalyseResult("Idzie Ala.")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertEquals(0, possibleChanges.size)
-    }
-
-    @Test
-    fun `Verification of 'Ala ma kota' returns possible dot at the end of sentence`() {
-        val example = prepareTextAnalyseResult("Ala ma kota")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertEquals(1, possibleChanges.size)
-        assertEquals(example.text.length, possibleChanges.first().position)
-        assertEquals(".", possibleChanges.first().suggestedSign)
-    }
-
-    @Test
-    fun `Verification of 'Ala ma kota' with dot at the end returns empty list of possible changes`() {
-        val example = prepareTextAnalyseResult("Ala ma kota.")
-        val possibleChanges = DotAtSentenceEndValidator.validate(example)
-        assertEquals(0, possibleChanges.size)
     }
 
     private fun prepareTextAnalyseResult(text: String): TextAnalyseResult {
