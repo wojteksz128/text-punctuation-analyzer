@@ -2,7 +2,7 @@ package net.wojteksz128.tpa.utils.morfeusz
 
 object MorfeuszTagDecode {
 
-    private val classesMap: Map<String, GrammarClass> = MorfeuszWordTags.classes.map { it.shortcut to it }.toMap()
+    private val classesMap: Map<String, GrammarClass> = Klasa.categories.map { it.shortcut to it }.toMap()
 
     fun decode(tag: String): MorfeuszDecoded {
         val tagParts = tag.split("[:.]".toRegex()).toMutableList()
