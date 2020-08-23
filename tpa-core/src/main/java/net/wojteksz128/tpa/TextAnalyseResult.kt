@@ -5,10 +5,11 @@ import net.wojteksz128.tpa.text.PunctuationMark
 import net.wojteksz128.tpa.text.TextPart
 import net.wojteksz128.tpa.text.Word
 
-data class TextAnalyseResult(val text: String) {
+data class TextAnalyseResult(val text: String, val textParts: List<TextPart> = listOf()) {
 
-    val textParts = mutableListOf<TextPart>()
-    val punctuationMarks = mutableListOf<PunctuationMark>()
-    val words = mutableListOf<Word>()
+    val punctuationMarks = textParts.filterIsInstance<PunctuationMark>()
+    val words = textParts.filterIsInstance<Word>()
+    val additionalParts = mutableMapOf<String, List<*>>()
+
     val possibleChanges = mutableListOf<PossibleChange>()
 }

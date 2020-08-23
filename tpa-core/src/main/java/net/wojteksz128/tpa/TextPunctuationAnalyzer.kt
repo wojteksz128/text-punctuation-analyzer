@@ -1,21 +1,20 @@
 package net.wojteksz128.tpa
 
-import net.wojteksz128.tpa.text.PunctuationMark
 import net.wojteksz128.tpa.text.TextValidator
-import net.wojteksz128.tpa.text.Word
+import net.wojteksz128.tpa.text.TextValidatorPreparer
 import net.wojteksz128.tpa.text.split.TextDivider
 
 open class TextPunctuationAnalyzer(private val textDivider: TextDivider) {
 
+    val validatorPreparers = mutableListOf<TextValidatorPreparer>()
     val validators = mutableListOf<TextValidator>()
 
     fun analyze(text: String): TextAnalyseResult {
-        val result = TextAnalyseResult(text)
+        val textParts = textDivider.divide(text)
+        val result = TextAnalyseResult(text, textParts)
 
-        result.textParts += textDivider.divide(text)
-        result.words += result.textParts.filterIsInstance<Word>()
-        result.punctuationMarks += result.textParts.filterIsInstance<PunctuationMark>()
-        validators.forEach { result.possibleChanges += it.validate(result) }
+        validatorPreparers.forEach { it.prepare(result) }
+        result.possibleChanges += validators.flatMap { it.validate(result) }
 
         return result
     }

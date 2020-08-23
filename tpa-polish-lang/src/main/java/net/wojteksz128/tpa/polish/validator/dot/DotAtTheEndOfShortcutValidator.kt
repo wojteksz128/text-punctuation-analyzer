@@ -10,13 +10,6 @@ import net.wojteksz128.tpa.utils.morfeusz.Klasa
 import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
 import net.wojteksz128.tpa.utils.morfeusz.MorfeuszDecoded
 
-private val Word.requiresDot: Boolean
-    get() {
-        val decodedWord = MorfeuszClassifier.classify(this.get()).first() as MorfeuszDecoded
-        val decodedWordWithDot = MorfeuszClassifier.classify("${this.get()}.").first() as MorfeuszDecoded
-        return decodedWord.grammarClass != decodedWordWithDot.grammarClass
-    }
-
 object DotAtTheEndOfShortcutValidator : TextValidator {
 
     override fun validate(text: TextAnalyseResult): List<PossibleChange> {
@@ -33,3 +26,10 @@ object DotAtTheEndOfShortcutValidator : TextValidator {
                 .map { PossibleChange(it.endAt + 1, ".") }
     }
 }
+
+private val Word.requiresDot: Boolean
+    get() {
+        val decodedWord = MorfeuszClassifier.classify(this.get()).first() as MorfeuszDecoded
+        val decodedWordWithDot = MorfeuszClassifier.classify("${this.get()}.").first() as MorfeuszDecoded
+        return decodedWord.grammarClass != decodedWordWithDot.grammarClass
+    }
