@@ -1,6 +1,7 @@
 package net.wojteksz128.tpa
 
 import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 import net.wojteksz128.tpa.text.split.DefaultClassifier
@@ -60,7 +61,7 @@ internal class TextPunctuationAnalyzerTest {
     @Test
     fun `Analyze text with one possible changee returns list of possible changes with one element`() {
         val text = "Idę"
-        val possibleChange = PossibleChange(3, ".")
+        val possibleChange = PossibleChange(ChangeType.INSERT, 3, new = ".")
         val validator = object : TextValidator {
             override fun validate(text: TextAnalyseResult): List<PossibleChange> = listOf(possibleChange)
         }

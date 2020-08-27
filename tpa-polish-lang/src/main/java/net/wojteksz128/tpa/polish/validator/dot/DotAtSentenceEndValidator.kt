@@ -3,6 +3,7 @@ package net.wojteksz128.tpa.polish.validator.dot
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.polish.validator.StatementGroup
 import net.wojteksz128.tpa.polish.validator.markAfter
+import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 
@@ -22,7 +23,7 @@ object DotAtSentenceEndValidator : TextValidator {
 
         additionalParts.map { it as StatementGroup }.forEach {
             if (!text.markAfter(".", it)) {
-                possibleChanges += PossibleChange(it.endAt + 1, ".")
+                possibleChanges += PossibleChange(ChangeType.INSERT, it.endAt + 1, new = ".")
             }
         }
 

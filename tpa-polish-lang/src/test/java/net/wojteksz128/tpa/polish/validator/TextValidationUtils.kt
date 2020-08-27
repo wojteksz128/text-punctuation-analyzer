@@ -2,6 +2,7 @@ package net.wojteksz128.tpa.polish.validator
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
@@ -20,7 +21,7 @@ object TextValidationUtils {
         assertEquals(expected.size, possibleChanges.size)
         expected.zip(possibleChanges).forEach {
             assertEquals(it.first.position, it.second.position)
-            assertEquals(it.first.suggestedSign, it.second.suggestedSign)
+            assertEquals(it.first.new, it.second.new)
         }
     }
 
@@ -32,7 +33,7 @@ object TextValidationUtils {
         return textAnalyseResult
     }
 
-    fun convertToPossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
-        return position.map { PossibleChange(it, sign) }
+    fun convertToInsertPossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
+        return position.map { PossibleChange(ChangeType.INSERT, it, new = sign) }
     }
 }

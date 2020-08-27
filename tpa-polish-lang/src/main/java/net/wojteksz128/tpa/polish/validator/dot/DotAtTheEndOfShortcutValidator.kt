@@ -3,6 +3,7 @@ package net.wojteksz128.tpa.polish.validator.dot
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.polish.validator.isClassOf
 import net.wojteksz128.tpa.polish.validator.markAfter
+import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 import net.wojteksz128.tpa.text.Word
@@ -23,7 +24,7 @@ object DotAtTheEndOfShortcutValidator : TextValidator {
     private fun getShortcutsWithoutRequiredDot(text: TextAnalyseResult): List<PossibleChange> {
         return text.words.filter { it.isClassOf(Klasa.SKROT) || it.isClassOf(Klasa.FORMA_NIEROZPOZNANA) }
                 .filter { it.requiresDot && !text.markAfter(".", it) }
-                .map { PossibleChange(it.endAt + 1, ".") }
+                .map { PossibleChange(ChangeType.INSERT, it.endAt + 1, new = ".") }
     }
 }
 

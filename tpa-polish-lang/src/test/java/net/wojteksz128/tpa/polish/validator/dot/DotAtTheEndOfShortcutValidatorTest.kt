@@ -1,6 +1,6 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
-import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToPossibleChanges
+import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToInsertPossibleChanges
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.verifyTextPossibleChanges
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.converter.ConvertWith
@@ -17,6 +17,6 @@ internal class DotAtTheEndOfShortcutValidatorTest {
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
     @CsvFileSource(resources = ["/DATEOS_one_dot.csv"], numLinesToSkip = 1)
     fun `Verification returns possible dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
-        verifyTextPossibleChanges(text, convertToPossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
+        verifyTextPossibleChanges(text, convertToInsertPossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
 }
