@@ -1,5 +1,6 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
+import net.wojteksz128.tpa.polish.validator.TextValidationUtils
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToInsertPossibleChanges
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.verifyTextPossibleChanges
 import org.junit.jupiter.params.ParameterizedTest
@@ -18,5 +19,11 @@ internal class DotAtTheEndOfShortcutValidatorTest {
     @CsvFileSource(resources = ["/DATEOS_one_dot.csv"], numLinesToSkip = 1)
     fun `Verification returns possible dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
         verifyTextPossibleChanges(text, convertToInsertPossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
+    }
+
+    @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
+    @CsvFileSource(resources = ["/DATEOS_delete_dot.csv"], numLinesToSkip = 1)
+    fun `Verification returns possible deleting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
+        verifyTextPossibleChanges(text, TextValidationUtils.convertToDeletePossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
 }

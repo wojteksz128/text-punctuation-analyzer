@@ -19,10 +19,7 @@ object TextValidationUtils {
         val example = prepareTextAnalyseResult(text)
         val possibleChanges = function(example)
         assertEquals(expected.size, possibleChanges.size)
-        expected.zip(possibleChanges).forEach {
-            assertEquals(it.first.position, it.second.position)
-            assertEquals(it.first.new, it.second.new)
-        }
+        expected.zip(possibleChanges).forEach { isPossibleChangeAsExpected(it.second, it.first) }
     }
 
     private fun prepareTextAnalyseResult(text: String): TextAnalyseResult {
@@ -33,7 +30,22 @@ object TextValidationUtils {
         return textAnalyseResult
     }
 
+    private fun isPossibleChangeAsExpected(actual: PossibleChange, expected: PossibleChange) {
+        assertEquals(expected.changeType, actual.changeType)
+        assertEquals(expected.position, actual.position)
+        assertEquals(expected.old, actual.old)
+        assertEquals(expected.new, actual.new)
+    }
+
     fun convertToInsertPossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
         return position.map { PossibleChange(ChangeType.INSERT, it, new = sign) }
+    }
+
+    fun convertToReplacePossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
+        return position.map { PossibleChange(ChangeType.REPLACE, it, new = sign) }
+    }
+
+    fun convertToDeletePossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
+        return position.map { PossibleChange(ChangeType.DELETE, it, new = sign) }
     }
 }

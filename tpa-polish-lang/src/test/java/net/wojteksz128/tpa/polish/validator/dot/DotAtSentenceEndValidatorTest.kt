@@ -1,5 +1,6 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
+import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToDeletePossibleChanges
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToInsertPossibleChanges
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.verifyTextPossibleChanges
 import org.junit.jupiter.params.ParameterizedTest
@@ -15,8 +16,14 @@ internal class DotAtSentenceEndValidatorTest {
     }
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
-    @CsvFileSource(resources = ["/DASEV_one_dot.csv"], numLinesToSkip = 1)
-    fun `Verification returns possible dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
+    @CsvFileSource(resources = ["/DASEV_insert_dot.csv"], numLinesToSkip = 1)
+    fun `Verification returns possible inserting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
         verifyTextPossibleChanges(text, convertToInsertPossibleChanges(position, ".")) { DotAtSentenceEndValidator.validate(it) }
+    }
+
+    @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
+    @CsvFileSource(resources = ["/DASEV_delete_dot.csv"], numLinesToSkip = 1)
+    fun `Verification returns possible deleting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
+        verifyTextPossibleChanges(text, convertToDeletePossibleChanges(position, ".")) { DotAtSentenceEndValidator.validate(it) }
     }
 }
