@@ -6,7 +6,7 @@ import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 object TextValidationUtils {
@@ -18,8 +18,9 @@ object TextValidationUtils {
     fun verifyTextPossibleChanges(text: String, expected: List<PossibleChange>, function: (TextAnalyseResult) -> List<PossibleChange>) {
         val example = prepareTextAnalyseResult(text)
         val possibleChanges = function(example)
-        assertEquals(expected.size, possibleChanges.size)
-        expected.zip(possibleChanges).forEach { isPossibleChangeAsExpected(it.second, it.first) }
+        val missing = expected.toMutableList()
+        missing.removeIf { possibleChanges.contains(it) }
+        assertTrue("Missed some expected possible changes: \n\t$missing") { missing.isEmpty() }
     }
 
     private fun prepareTextAnalyseResult(text: String): TextAnalyseResult {
@@ -28,13 +29,6 @@ object TextValidationUtils {
         StatementGroupTextValidatorPreparer.prepare(textAnalyseResult)
 
         return textAnalyseResult
-    }
-
-    private fun isPossibleChangeAsExpected(actual: PossibleChange, expected: PossibleChange) {
-        assertEquals(expected.changeType, actual.changeType)
-        assertEquals(expected.position, actual.position)
-        assertEquals(expected.old, actual.old)
-        assertEquals(expected.new, actual.new)
     }
 
     fun convertToInsertPossibleChanges(position: IntArray, sign: String): List<PossibleChange> {

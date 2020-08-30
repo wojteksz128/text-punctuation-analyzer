@@ -12,12 +12,13 @@ object DotAtSentenceEndValidator : TextValidator {
     override fun validate(text: TextAnalyseResult): List<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
 
-        possibleChanges += checkSentence(text)
+        possibleChanges += findSentenceWithoutDotAtEnd(text)
+        possibleChanges += findDotInsideSentenceGroup(text)
 
         return possibleChanges
     }
 
-    private fun checkSentence(text: TextAnalyseResult): List<PossibleChange> {
+    private fun findSentenceWithoutDotAtEnd(text: TextAnalyseResult): Iterable<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
         val additionalParts = text.additionalParts["Grupa orzeczenia"] ?: listOf<Any>()
 
@@ -29,4 +30,15 @@ object DotAtSentenceEndValidator : TextValidator {
 
         return possibleChanges
     }
+
+    private fun findDotInsideSentenceGroup(text: TextAnalyseResult): Iterable<PossibleChange> {
+        val sentenceGroups = text.additionalParts["Grupa orzeczenia"] ?: listOf<Any>()
+
+        return sentenceGroups.map { it as StatementGroup }
+                .flatMap { findIncorrectEndedWords(it, text) }
+                .map { PossibleChange(ChangeType.DELETE, it.endAt + 1, old = ".") }
+    }
+
+    private fun findIncorrectEndedWords(it: StatementGroup, text: TextAnalyseResult) =
+            it.items.sortedBy { word -> word.startAt }.dropLast(1).filter { text.markAfter(".", it) }
 }
