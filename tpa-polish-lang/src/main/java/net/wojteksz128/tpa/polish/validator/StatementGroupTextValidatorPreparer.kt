@@ -27,14 +27,14 @@ object StatementGroupTextValidatorPreparer : TextValidatorPreparer {
     }
 
     private fun prepareComplement(statement: Word, result: TextAnalyseResult): List<Word> {
-        val sentenceComplements = mutableListOf<Word>()
+        val statementComplements = mutableListOf<Word>()
         isNounPossible = true
 
-        sentenceComplements += result.textParts.filter { statement.endAt < it.startAt && it is Word }                   // get words after statement
+        statementComplements += result.textParts.filter { statement.endAt < it.startAt && it is Word }                   // get words after statement
                 .map { it as Word }
                 .takeWhile { canBePartOfComplement(it) }
 
-        return sentenceComplements
+        return statementComplements
     }
 
     private fun canBePartOfComplement(it: Word): Boolean {

@@ -13,7 +13,7 @@ object DotAtSentenceEndValidator : TextValidator {
         val possibleChanges = mutableListOf<PossibleChange>()
 
         possibleChanges += findSentenceWithoutDotAtEnd(text)
-        possibleChanges += findDotInsideSentenceGroup(text)
+        possibleChanges += findDotInsideStatementGroup(text)
 
         return possibleChanges
     }
@@ -31,10 +31,10 @@ object DotAtSentenceEndValidator : TextValidator {
         return possibleChanges
     }
 
-    private fun findDotInsideSentenceGroup(text: TextAnalyseResult): Iterable<PossibleChange> {
-        val sentenceGroups = text.additionalParts["Grupa orzeczenia"] ?: listOf<Any>()
+    private fun findDotInsideStatementGroup(text: TextAnalyseResult): Iterable<PossibleChange> {
+        val statementGroups = text.additionalParts["Grupa orzeczenia"] ?: listOf<Any>()
 
-        return sentenceGroups.map { it as StatementGroup }
+        return statementGroups.map { it as StatementGroup }
                 .flatMap { findIncorrectEndedWords(it, text) }
                 .map { PossibleChange(ChangeType.DELETE, it.endAt + 1, old = ".") }
     }
