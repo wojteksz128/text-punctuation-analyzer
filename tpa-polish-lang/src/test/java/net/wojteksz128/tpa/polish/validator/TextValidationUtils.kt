@@ -46,6 +46,6 @@ object TextValidationUtils {
     }
 
     fun convertToDeletePossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
-        return position.map { PossibleChange(ChangeType.DELETE, it, new = sign) }
+        return position.map { PossibleChange(ChangeType.DELETE, it, old = sign) }
     }
 }

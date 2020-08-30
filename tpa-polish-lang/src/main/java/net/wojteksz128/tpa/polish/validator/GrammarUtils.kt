@@ -12,5 +12,8 @@ infix fun Word.isTypeOf(partOfSpeech: PartOfSpeech) = possibleCategories.map { i
 infix fun Word.isClassOf(grammarClass: GrammarClass) = possibleCategories.map { it as MorfeuszDecoded }
         .any { it.grammarClass == grammarClass }
 
-fun Word.haveOneOf(vararg categories: GrammarCategory) = possibleCategories.map { it as MorfeuszDecoded }
+fun Word.haveAnyOf(vararg categories: GrammarCategory) = possibleCategories.map { it as MorfeuszDecoded }
         .any { decoded -> decoded.wordCategories.any { it in categories } }
+
+fun Word.haveAllOf(vararg categories: GrammarCategory) = possibleCategories.map { it as MorfeuszDecoded }
+        .any { decoded -> decoded.wordCategories.containsAll(categories.toList()) }

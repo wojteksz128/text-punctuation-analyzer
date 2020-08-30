@@ -35,9 +35,9 @@ private fun TextAnalyseResult.prepareComplement(statement: Word): List<Word> {
 
 private fun canBePartOfComplement(it: Word): Boolean {
     val isInfinitive = it isClassOf Klasa.BEZOKOLICZNIK
-    val isNoun = it isTypeOf PartOfSpeech.NOUN && it.haveOneOf(DOPELNIACZ, CELOWNIK, BIERNIK, NARZEDNIK, MIEJSCOWNIK)
+    val isNoun = it isTypeOf PartOfSpeech.NOUN && it.haveAnyOf(DOPELNIACZ, CELOWNIK, BIERNIK, NARZEDNIK, MIEJSCOWNIK)
             && isNounPossible
-    if (isNoun && it.haveOneOf(MIANOWNIK)) isNounPossible = false
+    if (isNoun && it.haveAnyOf(MIANOWNIK)) isNounPossible = false
     val isPronoun = it isTypeOf PartOfSpeech.PRONOUN
     val isAdverb = it isTypeOf PartOfSpeech.ADVERB
     return isInfinitive || isNoun || isPronoun || isAdverb
