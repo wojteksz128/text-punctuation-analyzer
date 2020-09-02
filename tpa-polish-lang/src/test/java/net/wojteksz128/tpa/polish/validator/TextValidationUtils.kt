@@ -2,6 +2,8 @@ package net.wojteksz128.tpa.polish.validator
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
+import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
@@ -27,6 +29,7 @@ object TextValidationUtils {
         val textAnalyseResult = TextAnalyseResult(text, textDivider.divide(text))
 
         StatementGroupTextValidatorPreparer.prepare(textAnalyseResult)
+        SentenceGroupValidatorPreparer.prepare(textAnalyseResult)
 
         return textAnalyseResult
     }
