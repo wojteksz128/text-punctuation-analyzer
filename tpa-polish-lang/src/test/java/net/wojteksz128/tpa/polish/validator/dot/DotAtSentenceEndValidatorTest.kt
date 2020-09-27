@@ -10,19 +10,19 @@ import org.junit.jupiter.params.provider.CsvFileSource
 internal class DotAtSentenceEndValidatorTest {
 
     @ParameterizedTest(name = "{index}. text=\"{0}\"")
-    @CsvFileSource(resources = ["/DASEV_correct.csv"], numLinesToSkip = 1)
+    @CsvFileSource(resources = ["/dotAtSentenceEnd/correct.csv"], numLinesToSkip = 1)
     fun `Verification returns empty list of possible changes`(text: String) {
         verifyTextPossibleChanges(text, listOf()) { DotAtSentenceEndValidator.validate(it) }
     }
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
-    @CsvFileSource(resources = ["/DASEV_insert_dot.csv"], numLinesToSkip = 1)
+    @CsvFileSource(resources = ["/dotAtSentenceEnd/insert_dots.csv"], numLinesToSkip = 1)
     fun `Verification returns possible inserting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
         verifyTextPossibleChanges(text, convertToInsertPossibleChanges(position, ".")) { DotAtSentenceEndValidator.validate(it) }
     }
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
-    @CsvFileSource(resources = ["/DASEV_delete_dot.csv"], numLinesToSkip = 1)
+    @CsvFileSource(resources = ["/dotAtSentenceEnd/delete_dots.csv"], numLinesToSkip = 1)
     fun `Verification returns possible deleting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
         verifyTextPossibleChanges(text, convertToDeletePossibleChanges(position, ".")) { DotAtSentenceEndValidator.validate(it) }
     }

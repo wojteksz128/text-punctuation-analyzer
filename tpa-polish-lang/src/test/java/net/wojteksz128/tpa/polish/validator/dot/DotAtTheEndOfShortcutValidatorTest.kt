@@ -10,19 +10,19 @@ import org.junit.jupiter.params.provider.CsvFileSource
 internal class DotAtTheEndOfShortcutValidatorTest {
 
     @ParameterizedTest(name = "{index}. text=\"{0}\"")
-    @CsvFileSource(resources = ["/DATEOS_correct.csv"], numLinesToSkip = 1)
+    @CsvFileSource(resources = ["/dotAtTheEndOfShortcut/correct.csv"], numLinesToSkip = 1)
     fun `Verification returns empty list of possible changes`(text: String) {
         verifyTextPossibleChanges(text, listOf()) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
-    @CsvFileSource(resources = ["/DATEOS_one_dot.csv"], numLinesToSkip = 1)
+    @CsvFileSource(resources = ["/dotAtTheEndOfShortcut/insert_dots.csv"], numLinesToSkip = 1)
     fun `Verification returns possible dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
         verifyTextPossibleChanges(text, convertToInsertPossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
-    @CsvFileSource(resources = ["/DATEOS_delete_dot.csv"], numLinesToSkip = 1)
+    @CsvFileSource(resources = ["/dotAtTheEndOfShortcut/delete_dots.csv"], numLinesToSkip = 1)
     fun `Verification returns possible deleting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
         verifyTextPossibleChanges(text, TextValidationUtils.convertToDeletePossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
