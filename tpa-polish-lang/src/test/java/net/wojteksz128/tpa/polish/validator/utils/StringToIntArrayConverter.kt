@@ -1,11 +1,11 @@
-package net.wojteksz128.tpa.polish.validator.dot
+package net.wojteksz128.tpa.polish.validator.utils
 
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.params.converter.ArgumentConverter
 
 class StringToIntArrayConverter : ArgumentConverter {
 
-    val numberRegex = "\\d+".toRegex()
+    private val numberRegex = "\\d+".toRegex()
 
     override fun convert(source: Any?, context: ParameterContext?): Any {
         if ((source !is String) || !source.startsWith('[') || !source.endsWith(']')) {
