@@ -15,7 +15,9 @@ object StatementGroupTextValidatorPreparer : TextValidatorPreparer {
         val verb = result.words.filter { it isTypeOf PartOfSpeech.VERB }
         val statementGroups = verb.map {
             prepareStatementGroup(it, result)
-        }
+        }.toMutableList()
+        statementGroups.reversed().zipWithNext { first, second -> first.items.removeAll(second.items) }
+        statementGroups.removeIf { it.items.isEmpty() }
 
         result.additionalParts[STATEMENT_GROUP.name] = statementGroups
     }
@@ -27,7 +29,7 @@ object StatementGroupTextValidatorPreparer : TextValidatorPreparer {
         return StatementGroup(result.text, statementGroupWords.first().startAt, statementGroupWords.last().endAt, statementGroupWords)
     }
 
-    private fun prepareComplement(statement: Word, result: TextAnalyseResult): List<Word> {
+    private fun prepareComplement(statement: Word, result: TextAnalyseResult): MutableList<Word> {
         val statementComplements = mutableListOf<Word>()
         isNounPossible = true
 
