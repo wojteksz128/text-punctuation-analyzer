@@ -9,7 +9,7 @@ import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorP
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
 
-class PolishTextPunctuationAnalyzerImpl : TextPunctuationAnalyzer(DefaultTextDividerImpl(PolishAlphabet, MorfeuszClassifier)) {
+class PolishTextPunctuationAnalyzerImpl : TextPunctuationAnalyzer(DefaultTextDividerImpl(PolishAlphabet), MorfeuszClassifier) {
 
     init {
         validatorPreparers += StatementGroupTextValidatorPreparer

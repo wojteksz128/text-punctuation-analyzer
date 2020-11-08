@@ -9,9 +9,9 @@ import java.io.InputStream
 import java.util.*
 import java.util.stream.Stream
 
-class JsonFileArgumentsProvider : ArgumentsProvider, AnnotationConsumer<JsonFileSource<Group>> {
+class JsonFileArgumentsProvider : ArgumentsProvider, AnnotationConsumer<JsonGroupTestFileSource> {
 
-    lateinit var resources: Array<String>
+    private lateinit var resources: Array<String>
 
     override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> {
         return ArrayList<Arguments>(resources.map { openInputStream(context, it) }.map { readValues(it) }.flatten()
@@ -27,7 +27,7 @@ class JsonFileArgumentsProvider : ArgumentsProvider, AnnotationConsumer<JsonFile
         return requiredTestClass.getResourceAsStream(resourcePath)
     }
 
-    override fun accept(t: JsonFileSource<Group>?) {
+    override fun accept(t: JsonGroupTestFileSource?) {
         resources = t?.resources ?: arrayOf()
     }
 

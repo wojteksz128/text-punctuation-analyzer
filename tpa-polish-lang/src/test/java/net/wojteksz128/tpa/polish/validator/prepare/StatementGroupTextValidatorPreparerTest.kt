@@ -2,8 +2,7 @@ package net.wojteksz128.tpa.polish.validator.prepare
 
 import net.wojteksz128.tpa.polish.validator.StatementGroup
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.prepareTextAnalyseResult
-import net.wojteksz128.tpa.polish.validator.utils.Group
-import net.wojteksz128.tpa.polish.validator.utils.JsonFileSource
+import net.wojteksz128.tpa.polish.validator.utils.JsonGroupTestFileSource
 import net.wojteksz128.tpa.polish.validator.utils.TextExpectationTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -20,7 +19,7 @@ internal class StatementGroupTextValidatorPreparerTest {
     }
 
     @ParameterizedTest(name = "{index}. {0}")
-    @JsonFileSource<Group>(resources = ["/statementGroupsPreparer/statement_groups.json"])
+    @JsonGroupTestFileSource(resources = ["/statementGroupsPreparer/statement_groups.json"])
     fun `Text with only verb have one statement group`(textExpectation: TextExpectationTest) {
         val result = prepareTextAnalyseResult(textExpectation.text, listOf(StatementGroupTextValidatorPreparer))
         val statementGroups = result.additionalParts[PolishAdditionalPartsName.STATEMENT_GROUP.name]

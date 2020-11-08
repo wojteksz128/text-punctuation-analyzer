@@ -16,7 +16,7 @@ object TextValidationUtils {
 
     private val alphabet = TestLanguageAlphabet()
     private val classifier = MorfeuszClassifier
-    private val textDivider = DefaultTextDividerImpl(alphabet, classifier)
+    private val textDivider = DefaultTextDividerImpl(alphabet)
 
     fun verifyTextPossibleChanges(text: String, expected: List<PossibleChange>, function: (TextAnalyseResult) -> List<PossibleChange>) {
         val example = prepareTextAnalyseResult(text, listOf(StatementGroupTextValidatorPreparer, SentenceGroupValidatorPreparer))
@@ -29,6 +29,8 @@ object TextValidationUtils {
     fun prepareTextAnalyseResult(text: String, preparers: Iterable<TextValidatorPreparer> = listOf()): TextAnalyseResult {
         val textAnalyseResult = TextAnalyseResult(text, textDivider.divide(text))
 
+        classifier.classify(textAnalyseResult)
+
         preparers.forEach { it.prepare(textAnalyseResult) }
 
         return textAnalyseResult
@@ -38,6 +40,7 @@ object TextValidationUtils {
         return position.map { PossibleChange(ChangeType.INSERT, it, new = sign) }
     }
 
+    @Suppress("unused")
     fun convertToReplacePossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
         return position.map { PossibleChange(ChangeType.REPLACE, it, new = sign) }
     }

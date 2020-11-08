@@ -13,13 +13,12 @@ import kotlin.test.assertEquals
 internal class TextPunctuationAnalyzerTest {
 
     private val alphabet = TestLanguageAlphabet()
-    private val classifier = DefaultClassifier()
-    private val textDivider = DefaultTextDividerImpl(alphabet, classifier)
+    private val textDivider = DefaultTextDividerImpl(alphabet)
     private lateinit var textPunctuationAnalyzer: TextPunctuationAnalyzer
 
     @BeforeEach
     fun beforeAnyTest() {
-        textPunctuationAnalyzer = TextPunctuationAnalyzer(textDivider)
+        textPunctuationAnalyzer = TextPunctuationAnalyzer(textDivider, DefaultClassifier())
     }
 
     @Test

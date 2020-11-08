@@ -2,9 +2,10 @@ package net.wojteksz128.tpa.polish.language
 
 import net.wojteksz128.tpa.language.LanguageAlphabet
 
+@Suppress("SpellCheckingInspection")
 object PolishAlphabet : LanguageAlphabet {
 
-    override fun getLetters() = "AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ".toCharArray()
+    override fun getLetters() = "AĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUWYZŹŻ-".toCharArray()
 
     override fun getSeparator() = " "
 

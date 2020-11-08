@@ -5,10 +5,10 @@ import net.wojteksz128.tpa.text.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
+@Suppress("SpellCheckingInspection")
 internal class DefaultTextDividerImplTest {
     private val languageAlphabet = TestLanguageAlphabet()
-    private val classifier = DefaultClassifier()
-    private val textSplitter: TextDivider = DefaultTextDividerImpl(languageAlphabet, classifier)
+    private val textSplitter: TextDivider = DefaultTextDividerImpl(languageAlphabet)
 
     @Test
     fun `Analyze empty text returns empty analyse result`() {
