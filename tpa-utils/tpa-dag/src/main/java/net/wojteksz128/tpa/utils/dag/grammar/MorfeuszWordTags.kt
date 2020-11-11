@@ -1,6 +1,8 @@
-package net.wojteksz128.tpa.utils.morfeusz
+@file:Suppress("MemberVisibilityCanBePrivate")
 
-import net.wojteksz128.tpa.utils.morfeusz.PartOfSpeech.*
+package net.wojteksz128.tpa.utils.dag.grammar
+
+import net.wojteksz128.tpa.utils.dag.grammar.PartOfSpeech.*
 
 object Klasa {
     val RZECZOWNIK = GrammarClass("subst", "rzeczownik", NOUN, listOf(Liczba.group, Przypadek.group, Rodzaj.group))
@@ -37,6 +39,7 @@ object Klasa {
     val BURKINOSTKA = GrammarClass("burk", "burkinostka", OTHER, listOf())
     val WYKRZYKNIK = GrammarClass("interj", "wykrzyknik", EXCLAMATION_MARK, listOf())
     val INTERPUNKCJA = GrammarClass("interp", "interpunkcja", OTHER, listOf())
+    val PARTYKULA = GrammarClass("part", "partykuła", PARTICLE, listOf())
     val CIALO_OBCE = GrammarClass("xxx", "ciało obce", OTHER, listOf())
     val FORMA_NIEROZPOZNANA = GrammarClass("ign", "forma nierozpoznana", OTHER, listOf())
 
@@ -45,8 +48,9 @@ object Klasa {
             ZAIMEK_NIETRZECIOOSOBOWY, ZAIMEK_TRZECIOOSOBOWY, ZAIMEK_SIBIE, FORMA_NIEPRZESZLA, FORMA_PRZYSZLA_BYC,
             AGLUTYNANT_BYC, PSEUDOIMIESLOW, ROZKAZNIK, BEZOSOBNIK, BEZOKOLICZNIK, IM_PRZYS_WSPOLCZESNY,
             IM_PRZYS_UPRZEDNI, ODSLOWNIK, IM_PRZYM_CZYNNY, IM_PRZYM_BIERNY, WINIEN, PREDYKATYW, PRZYIMEK,
-            SPOJNIK_WSPOLCZESNY, SPOJNIK_PODRZEDNY, KUBLIK, SKROT, BURKINOSTKA, WYKRZYKNIK, INTERPUNKCJA, CIALO_OBCE,
-            FORMA_NIEROZPOZNANA)
+            SPOJNIK_WSPOLCZESNY, SPOJNIK_PODRZEDNY, KUBLIK, SKROT, BURKINOSTKA, WYKRZYKNIK, INTERPUNKCJA, PARTYKULA,
+            CIALO_OBCE, FORMA_NIEROZPOZNANA)
+    val classesMap: Map<String, GrammarClass> = categories.map { it.shortcut to it }.toMap()
 }
 
 /*
@@ -60,7 +64,7 @@ object Liczba {
 
     val categories = listOf(POJEDYNCZA, MNOGA)
 
-    val group = GrammarCategoryGroup("liczba", Liczba.categories)
+    val group = GrammarCategoryGroup("liczba", categories)
 }
 
 /*
@@ -84,7 +88,7 @@ object Przypadek {
 
     val categories = listOf(MIANOWNIK, DOPELNIACZ, CELOWNIK, BIERNIK, NARZEDNIK, MIEJSCOWNIK, WOLACZ)
 
-    val group = GrammarCategoryGroup("przypadek", Przypadek.categories)
+    val group = GrammarCategoryGroup("przypadek", categories)
 }
 
 /*
@@ -113,7 +117,7 @@ object Rodzaj {
     val categories = listOf(MESKI_OSOBOWY, MESKI_ZWIERZECY, MESKI_RZECZOWY, ZENSKI, NIJAKI_ZBIOROWY, NIJAKI_ZWYKLY,
             PRZYMNOGI_OSOBOWY, PRZYMNOGI_ZWYKLY, PRZYMNOGI_OPISOWY)
 
-    val group = GrammarCategoryGroup("rodzaj", Rodzaj.categories)
+    val group = GrammarCategoryGroup("rodzaj", categories)
 }
 
 /*
@@ -129,7 +133,7 @@ object Osoba {
 
     val categories = listOf(PIERWSZA, DRUGA, TRZECIA)
 
-    val group = GrammarCategoryGroup("osoba", Osoba.categories)
+    val group = GrammarCategoryGroup("osoba", categories)
 }
 
 /*
@@ -145,7 +149,7 @@ object Stopien {
 
     val categories = listOf(ROWNY, WYZSZY, NAJWYZSZY)
 
-    val group = GrammarCategoryGroup("stopień", Stopien.categories)
+    val group = GrammarCategoryGroup("stopień", categories)
 }
 
 /*
@@ -159,7 +163,7 @@ object Aspekt {
 
     val categories = listOf(NIEDOKONANY, DOKONANY)
 
-    val group = GrammarCategoryGroup("aspekt", Aspekt.categories)
+    val group = GrammarCategoryGroup("aspekt", categories)
 }
 
 /*
@@ -173,7 +177,7 @@ object Zanegowanie {
 
     val categories = listOf(NIEZANEGOWANA, ZANEGOWANA)
 
-    val group = GrammarCategoryGroup("zanegowanie", Zanegowanie.categories)
+    val group = GrammarCategoryGroup("zanegowanie", categories)
 }
 
 /*
@@ -187,7 +191,7 @@ object Akcentowosc {
 
     val categories = listOf(AKCENTOWANA, NIEAKCENTOWANA)
 
-    val group = GrammarCategoryGroup("akcentowość", Akcentowosc.categories)
+    val group = GrammarCategoryGroup("akcentowość", categories)
 }
 
 /*
@@ -201,7 +205,7 @@ object Poprzyimkowosc {
 
     val categories = listOf(POPRZYIMKOWA, NIEPOPRZYIMKOWA)
 
-    val group = GrammarCategoryGroup("poprzyimkowość", Poprzyimkowosc.categories)
+    val group = GrammarCategoryGroup("poprzyimkowość", categories)
 }
 
 /*
@@ -215,7 +219,7 @@ object Akomodacyjnosc {
 
     val categories = listOf(UZGADNIAJACA, RZADZACA)
 
-    val group = GrammarCategoryGroup("akomodacyjność", Akomodacyjnosc.categories)
+    val group = GrammarCategoryGroup("akomodacyjność", categories)
 }
 
 /*
@@ -229,7 +233,7 @@ object Aglutynacyjnosc {
 
     val categories = listOf(AGLUTYNACYJNA, NIEAGLUTYNACYJNA)
 
-    val group = GrammarCategoryGroup("aglutynacyjność", Aglutynacyjnosc.categories)
+    val group = GrammarCategoryGroup("aglutynacyjność", categories)
 }
 
 /*
@@ -243,5 +247,5 @@ object Wokalicznosc {
 
     val categories = listOf(WOKALICZNA, NIEWOKALICZNA)
 
-    val group = GrammarCategoryGroup("wokaliczność", Wokalicznosc.categories)
+    val group = GrammarCategoryGroup("wokaliczność", categories)
 }

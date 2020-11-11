@@ -5,9 +5,9 @@ import net.wojteksz128.tpa.polish.validator.*
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.STATEMENT_GROUP
 import net.wojteksz128.tpa.text.TextValidatorPreparer
 import net.wojteksz128.tpa.text.Word
-import net.wojteksz128.tpa.utils.morfeusz.Klasa
-import net.wojteksz128.tpa.utils.morfeusz.PartOfSpeech
-import net.wojteksz128.tpa.utils.morfeusz.Przypadek
+import net.wojteksz128.tpa.utils.dag.grammar.Klasa
+import net.wojteksz128.tpa.utils.dag.grammar.PartOfSpeech
+import net.wojteksz128.tpa.utils.dag.grammar.Przypadek
 
 // TODO: 23.08.2020 Prepare some tests
 object StatementGroupTextValidatorPreparer : TextValidatorPreparer {

@@ -8,7 +8,10 @@ import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 import net.wojteksz128.tpa.text.Word
-import net.wojteksz128.tpa.utils.morfeusz.*
+import net.wojteksz128.tpa.utils.dag.grammar.Klasa
+import net.wojteksz128.tpa.utils.dag.grammar.Liczba
+import net.wojteksz128.tpa.utils.dag.grammar.Przypadek
+import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
 
 object DotAtTheEndOfShortcutValidator : TextValidator {
 
@@ -39,7 +42,8 @@ object DotAtTheEndOfShortcutValidator : TextValidator {
 
 private val Word.requiresDot: Boolean
     get() {
-        val decodedWord = MorfeuszClassifier.classify(this.get()).first() as MorfeuszDecoded
-        val decodedWordWithDot = MorfeuszClassifier.classify("${this.get()}.").first() as MorfeuszDecoded
-        return decodedWordWithDot.grammarClass == Klasa.SKROT && decodedWordWithDot.grammarClass != decodedWord.grammarClass
+        val decodedWord = MorfeuszClassifier.classify(this.get()).first()
+        val decodedWordWithDot = MorfeuszClassifier.classify("${this.get()}.").first()
+        return decodedWordWithDot.textPartSpecification.grammarClass == Klasa.SKROT
+                && decodedWordWithDot.textPartSpecification.grammarClass != decodedWord.textPartSpecification.grammarClass
     }

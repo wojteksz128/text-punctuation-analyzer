@@ -26,9 +26,9 @@ internal class MorfeuszTest {
         val analyzedText = "Ala"
         val result = instance.analyseAsList(analyzedText)
         assertTrue { result.size == 3 }
-        result.forEach { morthInterpretation ->
-            println("${morthInterpretation.orth}, ${morthInterpretation.lemma}, ${morthInterpretation.getTag(instance)}")
-            val decoded = MorfeuszTagDecode.decode(morthInterpretation.getTag(instance))
+        result.forEach { morphInterpretation ->
+            println("${morphInterpretation.orth}, ${morphInterpretation.lemma}, ${morphInterpretation.getTag(instance)}")
+            val decoded = MorphInterpretationConverter.convert(morphInterpretation, instance)
             println(decoded)
             println()
         }

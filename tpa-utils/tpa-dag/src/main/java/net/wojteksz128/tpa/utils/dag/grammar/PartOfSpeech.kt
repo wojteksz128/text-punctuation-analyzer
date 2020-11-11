@@ -1,4 +1,4 @@
-package net.wojteksz128.tpa.utils.morfeusz
+package net.wojteksz128.tpa.utils.dag.grammar
 
 enum class PartOfSpeech {
     /** Rzeczownik */

@@ -2,18 +2,18 @@ package net.wojteksz128.tpa.utils.morfeusz
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.text.TextPart
-import net.wojteksz128.tpa.text.TextPartCategory
 import net.wojteksz128.tpa.text.split.Classifier
+import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 import pl.sgjp.morfeusz.Morfeusz
 
 object MorfeuszClassifier : Classifier {
 
-    val instance: Morfeusz = Morfeusz.createInstance()
+    private val instance: Morfeusz = Morfeusz.createInstance()
 
-    fun classify(word: String): List<TextPartCategory> {
+    fun classify(word: String): List<TextPartInterpretation> {
         val interpretation = instance.analyseAsList(word)
 
-        return interpretation.map { MorfeuszTagDecode.decode(it.getTag(instance)) }
+        return interpretation.mapNotNull { MorphInterpretationConverter.convert(it, instance) }
     }
 
     override fun classify(result: TextAnalyseResult) {
@@ -25,8 +25,8 @@ object MorfeuszClassifier : Classifier {
             while (textPart == null || !interpretation.key.contains(textPart!!.get()))
                 textPart = iterator.next()
 
-            interpretation.value.forEach {
-                textPart?.possibleCategories?.add(MorfeuszTagDecode.decode(it.getTag(instance)))
+            interpretation.value.mapNotNull { MorphInterpretationConverter.convert(it, instance) }.forEach {
+                textPart?.possibleCategories?.add(it)
             }
         }
     }

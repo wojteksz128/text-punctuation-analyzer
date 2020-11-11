@@ -19,5 +19,29 @@
         ]
       }
     ]
+  },
+  {
+    "text": "Idzie Paweł.",
+    "expected": [
+      {
+        "items": [
+          "Idzie",
+          "Paweł"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Idzie Paweł do domu.",
+    "expected": [
+      {
+        "items": [
+          "Idzie",
+          "Paweł",
+          "do",
+          "domu"
+        ]
+      }
+    ]
   }
 ]

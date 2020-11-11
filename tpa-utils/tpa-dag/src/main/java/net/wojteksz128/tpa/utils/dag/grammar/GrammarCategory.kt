@@ -1,4 +1,4 @@
-package net.wojteksz128.tpa.utils.morfeusz
+package net.wojteksz128.tpa.utils.dag.grammar
 
 class GrammarCategory(val shortcut: String, val valueName: String) {
     lateinit var property: GrammarCategoryGroup
