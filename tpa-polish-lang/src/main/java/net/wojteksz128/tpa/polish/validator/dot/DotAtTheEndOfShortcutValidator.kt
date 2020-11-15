@@ -1,6 +1,7 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
 import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.polish.net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.haveAllOf
 import net.wojteksz128.tpa.polish.validator.isClassOf
 import net.wojteksz128.tpa.polish.validator.markAfter
@@ -11,7 +12,6 @@ import net.wojteksz128.tpa.text.Word
 import net.wojteksz128.tpa.utils.dag.grammar.Klasa
 import net.wojteksz128.tpa.utils.dag.grammar.Liczba
 import net.wojteksz128.tpa.utils.dag.grammar.Przypadek
-import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
 
 object DotAtTheEndOfShortcutValidator : TextValidator {
 
@@ -40,10 +40,11 @@ object DotAtTheEndOfShortcutValidator : TextValidator {
             word.isClassOf(Klasa.RZECZOWNIK) && word.haveAllOf(Przypadek.MIANOWNIK, Liczba.POJEDYNCZA)
 }
 
+// TODO: 15.11.2020 Zmiana implementacji konieczna
 private val Word.requiresDot: Boolean
     get() {
-        val decodedWord = MorfeuszClassifier.classify(this.get()).first()
-        val decodedWordWithDot = MorfeuszClassifier.classify("${this.get()}.").first()
+        val decodedWord = PolishWordsClassifier.instance.classify(this.get()).first()
+        val decodedWordWithDot = PolishWordsClassifier.instance.classify("${this.get()}.").first()
         return decodedWordWithDot.textPartSpecification.grammarClass == Klasa.SKROT
                 && decodedWordWithDot.textPartSpecification.grammarClass != decodedWord.textPartSpecification.grammarClass
     }

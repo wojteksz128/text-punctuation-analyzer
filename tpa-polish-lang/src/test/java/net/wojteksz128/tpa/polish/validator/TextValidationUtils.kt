@@ -2,20 +2,20 @@ package net.wojteksz128.tpa.polish.validator
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.polish.net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
 import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidatorPreparer
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
-import net.wojteksz128.tpa.utils.morfeusz.MorfeuszClassifier
 import kotlin.test.assertTrue
 
 
 object TextValidationUtils {
 
     private val alphabet = TestLanguageAlphabet()
-    private val classifier = MorfeuszClassifier
+    private val classifier = PolishWordsClassifier.instance
     private val textDivider = DefaultTextDividerImpl(alphabet)
 
     fun verifyTextPossibleChanges(text: String, expected: List<PossibleChange>, function: (TextAnalyseResult) -> List<PossibleChange>) {

@@ -15,6 +15,7 @@
     <modules>
         <module>tpa-morfeusz</module>
         <module>tpa-dag</module>
+        <module>tpa-concraft</module>
     </modules>
 
 

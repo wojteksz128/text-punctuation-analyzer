@@ -13,6 +13,8 @@ data class TextPartSpecification(
         val labelsId: Int,
         var labels: Collection<String>,
         var grammarClass: GrammarClass,
-        var wordCategories: List<GrammarCategory>
+        var wordCategories: List<GrammarCategory>,
+        var probability: Float = 0.0f,
+        var endOfSentence: Boolean = false
 ) {
 }

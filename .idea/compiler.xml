@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="tpa-concraft" />
         <module name="tpa-morfeusz" />
         <module name="tpa-dag" />
         <module name="tpa-core" />
@@ -14,7 +15,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="tpa-concraft" target="1.5" />
       <module name="tpa-jpl" target="1.5" />
     </bytecodeTargetLevel>
   </component>
