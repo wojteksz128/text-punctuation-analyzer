@@ -108,13 +108,14 @@ object Rodzaj {
     val MESKI_ZWIERZECY = GrammarCategory("m2", "męski zwierzęcy")
     val MESKI_RZECZOWY = GrammarCategory("m3", "męski rzeczowy")
     val ZENSKI = GrammarCategory("f", "żeński")
+    val NIJAKI = GrammarCategory("n", "nijaki")
     val NIJAKI_ZBIOROWY = GrammarCategory("n1", "nijaki zbiorowy")
     val NIJAKI_ZWYKLY = GrammarCategory("n2", "nijaki zwykły")
     val PRZYMNOGI_OSOBOWY = GrammarCategory("p1", "przymnogi osobowy")
     val PRZYMNOGI_ZWYKLY = GrammarCategory("p2", "przymnogi zwykły")
     val PRZYMNOGI_OPISOWY = GrammarCategory("p3", "przymnogi opisowy")
 
-    val categories = listOf(MESKI_OSOBOWY, MESKI_ZWIERZECY, MESKI_RZECZOWY, ZENSKI, NIJAKI_ZBIOROWY, NIJAKI_ZWYKLY,
+    val categories = listOf(MESKI_OSOBOWY, MESKI_ZWIERZECY, MESKI_RZECZOWY, ZENSKI, NIJAKI, NIJAKI_ZBIOROWY, NIJAKI_ZWYKLY,
             PRZYMNOGI_OSOBOWY, PRZYMNOGI_ZWYKLY, PRZYMNOGI_OPISOWY)
 
     val group = GrammarCategoryGroup("rodzaj", categories)

@@ -36,7 +36,7 @@ object ParseServiceParamConverter {
         val nodeInfo = NodeInfo(paragraphValues[0].toInt(), paragraphValues[1].toInt())
         val textPartSpecification = TextPartSpecification(paragraphValues[2], paragraphValues[3], 0, paragraphValues[4],
                 0, paragraphValues[5], 0, listOf(), GrammarClass("", "", PartOfSpeech.OTHER, listOf()),
-                listOf(), paragraphValues[7].toFloat())
+                listOf(), paragraphValues[7].toFloat(), paragraphValues[9] == "eos")
         return TextPartInterpretation(nodeInfo, textPartSpecification)
     }
 }

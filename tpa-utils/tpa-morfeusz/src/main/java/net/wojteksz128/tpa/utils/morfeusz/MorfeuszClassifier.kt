@@ -8,7 +8,7 @@ import pl.sgjp.morfeusz.Morfeusz
 
 open class MorfeuszClassifier : Classifier {
 
-    private val morfeuszInstance: Morfeusz = Morfeusz.createInstance()
+    private val morfeuszInstance: Morfeusz = MorfeuszUtils.morfeuszInstance
 
     fun classify(word: String): List<TextPartInterpretation> {
         val interpretation = morfeuszInstance.analyseAsList(word)
