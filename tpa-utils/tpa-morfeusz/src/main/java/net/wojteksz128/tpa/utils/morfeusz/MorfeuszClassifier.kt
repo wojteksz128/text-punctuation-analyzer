@@ -28,6 +28,7 @@ open class MorfeuszClassifier : Classifier {
             interpretation.value.mapNotNull { MorphInterpretationConverter.convert(it, morfeuszInstance) }.forEach {
                 textPart?.possibleCategories?.add(it)
             }
+            textPart = if (iterator.hasNext()) iterator.next() else null
         }
     }
 

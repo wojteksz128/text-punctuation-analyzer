@@ -44,9 +44,10 @@ object StatementGroupTextValidatorPreparer : TextValidatorPreparer {
         val isInfinitive = it isClassOf Klasa.BEZOKOLICZNIK
         val isNoun = it isTypeOf PartOfSpeech.NOUN && it.haveAnyOf(Przypadek.DOPELNIACZ, Przypadek.CELOWNIK, Przypadek.BIERNIK, Przypadek.NARZEDNIK, Przypadek.MIEJSCOWNIK)
                 && isNounPossible
-        if (isNoun && it.haveAnyOf(Przypadek.MIANOWNIK)) isNounPossible = false
+        isNounPossible = !(isNoun && it.haveAnyOf(Przypadek.MIANOWNIK))
         val isPronoun = it isTypeOf PartOfSpeech.PRONOUN
+        val isPreposition = it isTypeOf PartOfSpeech.PREPOSITION
         val isAdverb = it isTypeOf PartOfSpeech.ADVERB
-        return isInfinitive || isNoun || isPronoun || isAdverb
+        return isInfinitive || isNoun || isPronoun || isAdverb || isPreposition
     }
 }
