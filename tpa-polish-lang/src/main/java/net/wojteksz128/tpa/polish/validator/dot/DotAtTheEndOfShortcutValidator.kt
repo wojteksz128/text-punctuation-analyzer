@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
 import net.wojteksz128.tpa.TextAnalyseResult
-import net.wojteksz128.tpa.polish.net.wojteksz128.tpa.polish.split.PolishWordsClassifier
+import net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.haveAllOf
 import net.wojteksz128.tpa.polish.validator.isClassOf
 import net.wojteksz128.tpa.polish.validator.markAfter

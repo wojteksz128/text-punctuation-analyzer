@@ -2,7 +2,7 @@ package net.wojteksz128.tpa.polish.validator
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
-import net.wojteksz128.tpa.polish.net.wojteksz128.tpa.polish.split.PolishWordsClassifier
+import net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
 import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
 import net.wojteksz128.tpa.text.ChangeType

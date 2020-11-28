@@ -1,4 +1,4 @@
-package net.wojteksz128.tpa.polish.net.wojteksz128.tpa.polish.split
+package net.wojteksz128.tpa.polish.split
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.utils.concraft.ContractProbabilityCalculator
