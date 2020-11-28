@@ -22,6 +22,13 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>klaxon</artifactId>
+            <version>5.4</version>
+        </dependency>
+
         <dependency>
             <groupId>net.wojteksz128</groupId>
             <artifactId>tpa-dag</artifactId>

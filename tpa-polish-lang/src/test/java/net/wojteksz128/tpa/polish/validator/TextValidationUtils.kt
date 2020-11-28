@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.polish.validator
 
 import net.wojteksz128.tpa.TextAnalyseResult
-import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.polish.net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
 import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
@@ -14,7 +14,7 @@ import kotlin.test.assertTrue
 
 object TextValidationUtils {
 
-    private val alphabet = TestLanguageAlphabet()
+    private val alphabet = LanguageAlphabetLoader.load(TextValidationUtils::class.java.getResourceAsStream("/test_lang.json"))
     private val classifier = PolishWordsClassifier.instance
     private val textDivider = DefaultTextDividerImpl(alphabet)
 

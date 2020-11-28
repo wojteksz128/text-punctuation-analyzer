@@ -1,13 +1,13 @@
 package net.wojteksz128.tpa.text.split
 
-import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.text.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 @Suppress("SpellCheckingInspection")
 internal class DefaultTextDividerImplTest {
-    private val languageAlphabet = TestLanguageAlphabet()
+    private val languageAlphabet = LanguageAlphabetLoader.load(DefaultTextDividerImplTest::class.java.getResourceAsStream("/test_lang.json"))
     private val textSplitter: TextDivider = DefaultTextDividerImpl(languageAlphabet)
 
     @Test

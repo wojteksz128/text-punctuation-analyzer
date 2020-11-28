@@ -1,6 +1,6 @@
 package net.wojteksz128.tpa
 
-import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 
 internal class TextPunctuationAnalyzerTest {
 
-    private val alphabet = TestLanguageAlphabet()
+    private val alphabet = LanguageAlphabetLoader.load(TextPunctuationAnalyzerTest::class.java.getResourceAsStream("/test_lang.json"))
     private val textDivider = DefaultTextDividerImpl(alphabet)
     private lateinit var textPunctuationAnalyzer: TextPunctuationAnalyzer
 
@@ -58,7 +58,7 @@ internal class TextPunctuationAnalyzerTest {
     }
 
     @Test
-    fun `Analyze text with one possible changee returns list of possible changes with one element`() {
+    fun `Analyze text with one possible change returns list of possible changes with one element`() {
         val text = "Idę"
         val possibleChange = PossibleChange(ChangeType.INSERT, 3, new = ".")
         val validator = object : TextValidator {
