@@ -15,10 +15,12 @@ internal class TextPunctuationAnalyzerTest {
     private val alphabet = LanguageAlphabetLoader.load(TextPunctuationAnalyzerTest::class.java.getResourceAsStream("/test_lang.json"))
     private val textDivider = DefaultTextDividerImpl(alphabet)
     private lateinit var textPunctuationAnalyzer: TextPunctuationAnalyzer
+    private lateinit var validators: MutableList<TextValidator>
 
     @BeforeEach
     fun beforeAnyTest() {
-        textPunctuationAnalyzer = TextPunctuationAnalyzer(textDivider, DefaultClassifier())
+        validators = mutableListOf()
+        textPunctuationAnalyzer = TextPunctuationAnalyzer(textDivider, DefaultClassifier(), listOf(), validators)
     }
 
     @Test
@@ -48,7 +50,7 @@ internal class TextPunctuationAnalyzerTest {
         val validator = object : TextValidator {
             override fun validate(text: TextAnalyseResult): List<PossibleChange> = listOf()
         }
-        textPunctuationAnalyzer.validators += validator
+        validators.add(validator)
         val result = textPunctuationAnalyzer.analyze(text)
         assertEquals(text, result.text)
         assertEquals(2, result.textParts.size)
@@ -64,7 +66,7 @@ internal class TextPunctuationAnalyzerTest {
         val validator = object : TextValidator {
             override fun validate(text: TextAnalyseResult): List<PossibleChange> = listOf(possibleChange)
         }
-        textPunctuationAnalyzer.validators += validator
+        validators.add(validator)
         val result = textPunctuationAnalyzer.analyze(text)
         assertEquals(text, result.text)
         assertEquals(1, result.textParts.size)
