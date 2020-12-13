@@ -15,6 +15,4 @@ class CommaBeforeWordsRule(val text: String) : CommaRule {
             .filter { match -> text.punctuationMarks.find { it.startAt == match.groups[1]!!.range.first - 2 } == null }/* spacja poprzedzająca przecinek */
             .map { PossibleChange(ChangeType.INSERT, it.groups[1]!!.range.first - 2, new = ",") }.asIterable()
     }
-
-
 }

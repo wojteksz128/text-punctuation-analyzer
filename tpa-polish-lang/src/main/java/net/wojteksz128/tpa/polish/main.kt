@@ -2,6 +2,7 @@ package net.wojteksz128.tpa.polish
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
+import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 
 /*
@@ -18,7 +19,8 @@ fun main(args: Array<String>) {
     args.forEach { text ->
         val recognizingText = printPreparingToClassifyText(text)
         val result = analyzer.analyze(text)
-        printRecognizedSolution(recognizingText, result)
+        printRecognizedParts(recognizingText, result)
+        printPossibleChanges(result)
     }
 }
 
@@ -32,14 +34,28 @@ private fun printPreparingToClassifyText(text: String): String {
     return recognizingText
 }
 
-private fun printRecognizedSolution(recognizingText: String, result: TextAnalyseResult) {
+private fun printRecognizedParts(recognizingText: String, result: TextAnalyseResult) {
     1.rangeTo(recognizingText.length).forEach { _ -> print("\b \b") }
     println("\rRozpoznano:")
     result.textParts.forEach { textPart ->
-        println(" -\t${textPart.javaClass.simpleName} '${textPart.get()}' na pozycji ${textPart.startAt}-${textPart.endAt} " +
-                if (textPart.possibleCategories.isNotEmpty()) "sklasyfikowany jako:" else "bez klasyfikacji")
+        println(
+            " -\t${textPart.javaClass.simpleName} '${textPart.get()}' na pozycji ${textPart.startAt}-${textPart.endAt} " +
+                    if (textPart.possibleCategories.isNotEmpty()) "sklasyfikowany jako:" else "bez klasyfikacji"
+        )
         textPart.possibleCategories.forEach { println("\t\t${formatToPrint(it)}") }
         println()
+    }
+}
+
+fun printPossibleChanges(result: TextAnalyseResult) {
+    println("Sugerowane zmiany")
+    result.possibleChanges.forEach {
+        val message = when (it.changeType) {
+            ChangeType.INSERT -> "Wstaw \"${it.new}\" na pozycję ${it.position}"
+            ChangeType.REPLACE -> "Zamień \"${it.old}\" z pozycji ${it.position} na \"${it.new}\""
+            ChangeType.DELETE -> "Usuń \"${it.old}\" z pozycji ${it.position}"
+        }
+        println("  -\t$message")
     }
 }
 
