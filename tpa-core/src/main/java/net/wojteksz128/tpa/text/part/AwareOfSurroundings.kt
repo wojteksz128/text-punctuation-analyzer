@@ -1,14 +1,4 @@
-package net.wojteksz128.tpa.text
-
-import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
-
-// TODO: 15.12.2020 Split to separate classes
-abstract class TextPart(
-    val text: String, val startAt: Int, val endAt: Int,
-    var possibleCategories: MutableList<TextPartInterpretation> = mutableListOf()
-) {
-    open fun get() = text.substring(startAt, endAt + 1)
-}
+package net.wojteksz128.tpa.text.part
 
 class AwareOfSurroundings<T : TextPart>(val base: T) :
     TextPart(base.text, base.startAt, base.endAt, base.possibleCategories) {
@@ -42,9 +32,3 @@ class AwareOfSurroundings<T : TextPart>(val base: T) :
         return this
     }
 }
-
-class PunctuationMark(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt)
-
-class Word(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt)
-
-class Separator(text: String, startAt: Int, endAt: Int) : TextPart(text, startAt, endAt)

@@ -5,7 +5,11 @@ import net.wojteksz128.tpa.polish.validator.StatementGroup
 import net.wojteksz128.tpa.polish.validator.markAfter
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.SENTENCE_GROUP
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.STATEMENT_GROUP
-import net.wojteksz128.tpa.text.*
+import net.wojteksz128.tpa.text.ChangeType
+import net.wojteksz128.tpa.text.PossibleChange
+import net.wojteksz128.tpa.text.TextValidator
+import net.wojteksz128.tpa.text.part.AwareOfSurroundings
+import net.wojteksz128.tpa.text.part.TextPart
 
 object DotAtSentenceEndValidator : TextValidator {
 

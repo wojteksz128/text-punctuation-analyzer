@@ -1,7 +1,11 @@
 package net.wojteksz128.tpa
 
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
-import net.wojteksz128.tpa.text.*
+import net.wojteksz128.tpa.text.ChangeType
+import net.wojteksz128.tpa.text.PossibleChange
+import net.wojteksz128.tpa.text.TextValidator
+import net.wojteksz128.tpa.text.part.PunctuationMark
+import net.wojteksz128.tpa.text.part.Word
 import net.wojteksz128.tpa.text.split.DefaultClassifier
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 import org.junit.jupiter.api.BeforeEach

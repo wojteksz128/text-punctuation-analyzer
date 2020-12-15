@@ -2,6 +2,10 @@ package net.wojteksz128.tpa.text.split
 
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.text.*
+import net.wojteksz128.tpa.text.part.PunctuationMark
+import net.wojteksz128.tpa.text.part.Separator
+import net.wojteksz128.tpa.text.part.TextPart
+import net.wojteksz128.tpa.text.part.Word
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

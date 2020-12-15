@@ -4,7 +4,7 @@ import net.wojteksz128.tpa.polish.validator.StatementGroup
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.prepareTextAnalyseResult
 import net.wojteksz128.tpa.polish.validator.utils.JsonGroupTestFileSource
 import net.wojteksz128.tpa.polish.validator.utils.TextExpectationTest
-import net.wojteksz128.tpa.text.AwareOfSurroundings
+import net.wojteksz128.tpa.text.part.AwareOfSurroundings
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import kotlin.test.assertEquals

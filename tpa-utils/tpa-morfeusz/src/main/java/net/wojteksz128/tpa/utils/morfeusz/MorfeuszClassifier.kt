@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.utils.morfeusz
 
 import net.wojteksz128.tpa.TextAnalyseData
-import net.wojteksz128.tpa.text.TextPart
+import net.wojteksz128.tpa.text.part.TextPart
 import net.wojteksz128.tpa.text.split.Classifier
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 import pl.sgjp.morfeusz.Morfeusz

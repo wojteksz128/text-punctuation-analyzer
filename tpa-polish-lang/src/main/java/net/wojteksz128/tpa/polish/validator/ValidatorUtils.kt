@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.polish.validator
 
-import net.wojteksz128.tpa.text.AwareOfSurroundings
-import net.wojteksz128.tpa.text.TextPart
+import net.wojteksz128.tpa.text.part.AwareOfSurroundings
+import net.wojteksz128.tpa.text.part.TextPart
 
 internal var isNounPossible = true
 

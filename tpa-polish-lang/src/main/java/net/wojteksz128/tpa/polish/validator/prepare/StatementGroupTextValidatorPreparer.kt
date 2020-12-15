@@ -3,9 +3,9 @@ package net.wojteksz128.tpa.polish.validator.prepare
 import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.polish.validator.*
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.STATEMENT_GROUP
-import net.wojteksz128.tpa.text.AwareOfSurroundings
 import net.wojteksz128.tpa.text.TextValidatorPreparer
-import net.wojteksz128.tpa.text.Word
+import net.wojteksz128.tpa.text.part.AwareOfSurroundings
+import net.wojteksz128.tpa.text.part.Word
 import net.wojteksz128.tpa.utils.dag.grammar.Klasa
 import net.wojteksz128.tpa.utils.dag.grammar.PartOfSpeech
 import net.wojteksz128.tpa.utils.dag.grammar.Przypadek

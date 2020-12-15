@@ -1,6 +1,11 @@
 package net.wojteksz128.tpa
 
-import net.wojteksz128.tpa.text.*
+import net.wojteksz128.tpa.text.PossibleChange
+import net.wojteksz128.tpa.text.TextValidator
+import net.wojteksz128.tpa.text.part.AwareOfSurroundings
+import net.wojteksz128.tpa.text.part.PunctuationMark
+import net.wojteksz128.tpa.text.part.TextPart
+import net.wojteksz128.tpa.text.part.Word
 
 data class TextAnalyseData(val text: String, val textParts: List<TextPart>) {
     val words = textParts.filterIsInstance<Word>().map { AwareOfSurroundings(it) }.sortedBy { it.startAt }

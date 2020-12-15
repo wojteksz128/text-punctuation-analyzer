@@ -1,10 +1,10 @@
 package net.wojteksz128.tpa.text.split
 
 import net.wojteksz128.tpa.language.LanguageAlphabet
-import net.wojteksz128.tpa.text.PunctuationMark
-import net.wojteksz128.tpa.text.Separator
-import net.wojteksz128.tpa.text.TextPart
-import net.wojteksz128.tpa.text.Word
+import net.wojteksz128.tpa.text.part.PunctuationMark
+import net.wojteksz128.tpa.text.part.Separator
+import net.wojteksz128.tpa.text.part.TextPart
+import net.wojteksz128.tpa.text.part.Word
 
 class DefaultTextDividerImpl(private val languageAlphabet: LanguageAlphabet)
     : TextDivider {

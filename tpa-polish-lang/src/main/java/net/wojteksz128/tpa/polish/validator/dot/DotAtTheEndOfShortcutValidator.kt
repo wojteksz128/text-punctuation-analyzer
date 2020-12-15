@@ -8,7 +8,7 @@ import net.wojteksz128.tpa.polish.validator.markAfter
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
-import net.wojteksz128.tpa.text.Word
+import net.wojteksz128.tpa.text.part.Word
 import net.wojteksz128.tpa.utils.dag.grammar.Klasa
 import net.wojteksz128.tpa.utils.dag.grammar.Liczba
 import net.wojteksz128.tpa.utils.dag.grammar.Przypadek
