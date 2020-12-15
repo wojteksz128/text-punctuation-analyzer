@@ -1,5 +1,6 @@
 package net.wojteksz128.tpa
 
+import net.wojteksz128.tpa.language.LanguageAlphabet
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 import net.wojteksz128.tpa.text.part.AwareOfSurroundings
@@ -7,7 +8,7 @@ import net.wojteksz128.tpa.text.part.PunctuationMark
 import net.wojteksz128.tpa.text.part.TextPart
 import net.wojteksz128.tpa.text.part.Word
 
-data class TextAnalyseData(val text: String, val textParts: List<TextPart>) {
+data class TextAnalyseData(val text: String, val textParts: List<TextPart>, val languageAlphabet: LanguageAlphabet) {
     val words = textParts.filterIsInstance<Word>().map { AwareOfSurroundings(it) }.sortedBy { it.startAt }
     val punctuationMarks = textParts.filterIsInstance<PunctuationMark>().map { AwareOfSurroundings(it) }
     val additionalParts = mutableMapOf<String, List<*>>()

@@ -33,7 +33,7 @@ object TextValidationUtils {
     }
 
     fun prepareTextAnalyseResult(text: String, preparers: Iterable<TextValidatorPreparer> = listOf()): TextAnalyseData {
-        val analyseData = TextAnalyseData(text, textDivider.divide(text))
+        val analyseData = TextAnalyseData(text, textDivider.divide(text), textDivider.languageAlphabet)
 
         classifier.classify(analyseData)
 
