@@ -1,33 +1,30 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.polish.validator.StatementGroup
 import net.wojteksz128.tpa.polish.validator.markAfter
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.SENTENCE_GROUP
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.STATEMENT_GROUP
-import net.wojteksz128.tpa.text.ChangeType
-import net.wojteksz128.tpa.text.PossibleChange
-import net.wojteksz128.tpa.text.TextPart
-import net.wojteksz128.tpa.text.TextValidator
+import net.wojteksz128.tpa.text.*
 
 object DotAtSentenceEndValidator : TextValidator {
 
-    override fun validate(text: TextAnalyseResult): List<PossibleChange> {
+    override fun validate(analyseData: TextAnalyseData): List<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
 
-        possibleChanges += findSentenceWithoutDotAtEnd(text)
-        possibleChanges += findDotInsideStatementGroup(text)
-        possibleChanges += findIncorrectPlacedDot(text)
+        possibleChanges += findSentenceWithoutDotAtEnd(analyseData)
+        possibleChanges += findDotInsideStatementGroup(analyseData)
+        possibleChanges += findIncorrectPlacedDot(analyseData)
 
         return possibleChanges
     }
 
-    private fun findSentenceWithoutDotAtEnd(text: TextAnalyseResult): Iterable<PossibleChange> {
+    private fun findSentenceWithoutDotAtEnd(analyseData: TextAnalyseData): Iterable<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
-        val additionalParts = text.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
+        val additionalParts = analyseData.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
 
-        additionalParts.map { it as StatementGroup }.forEach {
-            if (!text.markAfter(".", it)) {
+        additionalParts.map { it as AwareOfSurroundings<*> }.forEach {
+            if (!markAfter(".", it)) {
                 possibleChanges += PossibleChange(ChangeType.INSERT, it.endAt + 1, new = ".")
             }
         }
@@ -35,25 +32,30 @@ object DotAtSentenceEndValidator : TextValidator {
         return possibleChanges
     }
 
-    private fun findDotInsideStatementGroup(text: TextAnalyseResult): Iterable<PossibleChange> {
-        val statementGroups = text.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
+    private fun findDotInsideStatementGroup(analyseData: TextAnalyseData): Iterable<PossibleChange> {
+        val statementGroups = analyseData.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
 
-        return statementGroups.map { it as StatementGroup }
-                .flatMap { findIncorrectEndedWords(it, text) }
-                .map { PossibleChange(ChangeType.DELETE, it.endAt + 1, old = ".") }
+        return statementGroups.map { it as AwareOfSurroundings<*> }
+            .flatMap { findIncorrectEndedWords(it) }
+            .map { PossibleChange(ChangeType.DELETE, it.endAt + 1, old = ".") }
     }
 
-    private fun findIncorrectEndedWords(it: StatementGroup, text: TextAnalyseResult) =
-            it.items.sortedBy { word -> word.startAt }.dropLast(1).filter { text.markAfter(".", it) }
+    private fun findIncorrectEndedWords(awareOfSurroundings: AwareOfSurroundings<*>) =
+        (awareOfSurroundings.base as StatementGroup).items.sortedBy { it.startAt }.dropLast(1)
+            .filter { markAfter(".", it) }
 
-    private fun findIncorrectPlacedDot(text: TextAnalyseResult): Iterable<PossibleChange> {
-        val list = text.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
-        val statementGroups = text.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
+    private fun findIncorrectPlacedDot(analyseData: TextAnalyseData): Iterable<PossibleChange> {
+        val list = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
+        val statementGroups = analyseData.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
 
-        return list.map { it as List<TextPart> }
-                .filter { sentenceParts ->
-                    statementGroups.map { (it as StatementGroup).items }.none { sentenceParts.containsAll(it) }
-                }
-                .map { PossibleChange(ChangeType.DELETE, it.last().startAt, old = it.last().get()) }
+        return list.map { it as List<*> }
+            .filter { sentenceParts ->
+                statementGroups.map { ((it as AwareOfSurroundings<*>).base as StatementGroup).items }
+                    .none { sentenceParts.containsAll(it) }
+            }
+            .map {
+                val lastSentencePart = it.last() as TextPart
+                PossibleChange(ChangeType.DELETE, lastSentencePart.startAt, old = lastSentencePart.get())
+            }
     }
 }

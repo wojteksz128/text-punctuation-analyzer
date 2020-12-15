@@ -1,6 +1,6 @@
 package net.wojteksz128.tpa.polish.validator
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
@@ -14,26 +14,32 @@ import kotlin.test.assertTrue
 
 object TextValidationUtils {
 
-    private val alphabet = LanguageAlphabetLoader.load(TextValidationUtils::class.java.getResourceAsStream("/test_lang.json"))
+    private val alphabet =
+        LanguageAlphabetLoader.load(TextValidationUtils::class.java.getResourceAsStream("/test_lang.json"))
     private val classifier = PolishWordsClassifier.instance
     private val textDivider = DefaultTextDividerImpl(alphabet)
 
-    fun verifyTextPossibleChanges(text: String, expected: List<PossibleChange>, function: (TextAnalyseResult) -> List<PossibleChange>) {
-        val example = prepareTextAnalyseResult(text, listOf(StatementGroupTextValidatorPreparer, SentenceGroupValidatorPreparer))
+    fun verifyTextPossibleChanges(
+        text: String,
+        expected: List<PossibleChange>,
+        function: (TextAnalyseData) -> List<PossibleChange>
+    ) {
+        val example =
+            prepareTextAnalyseResult(text, listOf(StatementGroupTextValidatorPreparer, SentenceGroupValidatorPreparer))
         val possibleChanges = function(example)
         val missing = expected.toMutableList()
         missing.removeIf { possibleChanges.contains(it) }
         assertTrue("Missed some expected possible changes: \n\t$missing") { missing.isEmpty() }
     }
 
-    fun prepareTextAnalyseResult(text: String, preparers: Iterable<TextValidatorPreparer> = listOf()): TextAnalyseResult {
-        val textAnalyseResult = TextAnalyseResult(text, textDivider.divide(text))
+    fun prepareTextAnalyseResult(text: String, preparers: Iterable<TextValidatorPreparer> = listOf()): TextAnalyseData {
+        val analyseData = TextAnalyseData(text, textDivider.divide(text))
 
-        classifier.classify(textAnalyseResult)
+        classifier.classify(analyseData)
 
-        preparers.forEach { it.prepare(textAnalyseResult) }
+        preparers.forEach { it.prepare(analyseData) }
 
-        return textAnalyseResult
+        return analyseData
     }
 
     fun convertToInsertPossibleChanges(position: IntArray, sign: String): List<PossibleChange> {

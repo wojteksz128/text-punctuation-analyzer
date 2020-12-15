@@ -1,6 +1,6 @@
 package net.wojteksz128.tpa.utils.morfeusz
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.text.TextPart
 import net.wojteksz128.tpa.text.split.Classifier
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
@@ -16,9 +16,9 @@ open class MorfeuszClassifier : Classifier {
         return interpretation.mapNotNull { MorphInterpretationConverter.convert(it, morfeuszInstance) }
     }
 
-    override fun classify(result: TextAnalyseResult) {
-        val interpretationList = morfeuszInstance.analyseAsList(result.text)
-        val iterator = result.textParts.iterator()
+    override fun classify(analyseData: TextAnalyseData) {
+        val interpretationList = morfeuszInstance.analyseAsList(analyseData.text)
+        val iterator = analyseData.textParts.iterator()
         var textPart: TextPart? = null
 
         return interpretationList.groupBy { "${it.startNode}_${it.orth}" }.forEach { interpretation ->

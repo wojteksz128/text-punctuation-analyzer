@@ -1,6 +1,6 @@
 package net.wojteksz128.tpa.polish.validator.comma
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.polish.validator.comma.rule.CommaBeforeWordsRule
 import net.wojteksz128.tpa.polish.validator.comma.rule.CommaRule
 import net.wojteksz128.tpa.text.PossibleChange
@@ -77,16 +77,16 @@ object CommaAsSentencesSeparatorValidator : TextValidator {
         CommaBeforeWordsRule("żeby")
     )
 
-    override fun validate(text: TextAnalyseResult): List<PossibleChange> {
+    override fun validate(analyseData: TextAnalyseData): List<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
 
-        possibleChanges += findSubordinateSentencesByKeyWords(text)
+        possibleChanges += findSubordinateSentencesByKeyWords(analyseData)
 
         return possibleChanges
     }
 
     // TODO: 29.11.2020 Istnieją zasady stosowania poszczególnych słów kluczowych - trzeba to zaimplementować
-    private fun findSubordinateSentencesByKeyWords(text: TextAnalyseResult): Iterable<PossibleChange> {
-        return rules.flatMap { rule -> rule.check(text) }
+    private fun findSubordinateSentencesByKeyWords(analyseData: TextAnalyseData): Iterable<PossibleChange> {
+        return rules.flatMap { rule -> rule.check(analyseData) }
     }
 }

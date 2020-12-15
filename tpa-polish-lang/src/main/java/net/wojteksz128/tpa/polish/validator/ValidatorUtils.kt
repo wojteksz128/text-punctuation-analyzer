@@ -1,10 +1,10 @@
 package net.wojteksz128.tpa.polish.validator
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.text.AwareOfSurroundings
 import net.wojteksz128.tpa.text.TextPart
 
 internal var isNounPossible = true
 
-
-
-fun TextAnalyseResult.markAfter(mark: String, part: TextPart) = punctuationMarks.filter { it.get() == mark && it.startAt == part.endAt + 1 }.size == 1
+// TODO: 14.12.2020 Sprawdza występowanie mark po AwareOfSurrounding - nie czy następny znak to mark
+fun <T : TextPart> markAfter(mark: String, part: AwareOfSurroundings<T>) =
+    part.partsBetweenLaterWord.any { it.get() == mark }

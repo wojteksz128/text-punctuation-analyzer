@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.text
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.TextAnalyseData
 
 interface TextValidatorPreparer {
-    fun prepare(result: TextAnalyseResult)
+    fun prepare(analyseData: TextAnalyseData)
 }

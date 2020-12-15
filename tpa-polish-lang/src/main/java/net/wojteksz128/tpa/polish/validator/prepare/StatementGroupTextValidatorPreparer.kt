@@ -1,8 +1,9 @@
 package net.wojteksz128.tpa.polish.validator.prepare
 
-import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.polish.validator.*
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.STATEMENT_GROUP
+import net.wojteksz128.tpa.text.AwareOfSurroundings
 import net.wojteksz128.tpa.text.TextValidatorPreparer
 import net.wojteksz128.tpa.text.Word
 import net.wojteksz128.tpa.utils.dag.grammar.Klasa
@@ -11,31 +12,37 @@ import net.wojteksz128.tpa.utils.dag.grammar.Przypadek
 
 // TODO: 23.08.2020 Prepare some tests
 object StatementGroupTextValidatorPreparer : TextValidatorPreparer {
-    override fun prepare(result: TextAnalyseResult) {
-        val verb = result.words.filter { it isTypeOf PartOfSpeech.VERB }
-        val statementGroups = verb.map {
-            prepareStatementGroup(it, result)
-        }.toMutableList()
+    override fun prepare(analyseData: TextAnalyseData) {
+        val verb = analyseData.words.filter { it.base isTypeOf PartOfSpeech.VERB }
+        val statementGroups = verb.map { prepareStatementGroup(it) }.toMutableList()
         statementGroups.reversed().zipWithNext { first, second -> first.items.removeAll(second.items) }
         statementGroups.removeIf { it.items.isEmpty() }
 
-        result.additionalParts[STATEMENT_GROUP.name] = statementGroups
+        // TODO: 15.12.2020 Assign surroundings
+        analyseData.additionalParts[STATEMENT_GROUP.name] = statementGroups.map { AwareOfSurroundings(it) }.toList()
     }
 
-    private fun prepareStatementGroup(statement: Word, result: TextAnalyseResult): StatementGroup {
-        val statementGroupWords = mutableListOf(statement)
-        statementGroupWords += prepareComplement(statement, result)
+    private fun prepareStatementGroup(statement: AwareOfSurroundings<Word>): StatementGroup {
+        val complementWords = (listOf(statement) + selectComplementWords(statement)).toMutableList()
 
-        return StatementGroup(result.text, statementGroupWords.first().startAt, statementGroupWords.last().endAt, statementGroupWords)
+        return StatementGroup(
+            statement.text,
+            complementWords.first().startAt,
+            complementWords.last().endAt,
+            complementWords
+        )
     }
 
-    private fun prepareComplement(statement: Word, result: TextAnalyseResult): MutableList<Word> {
-        val statementComplements = mutableListOf<Word>()
+    private fun selectComplementWords(statement: AwareOfSurroundings<Word>): List<AwareOfSurroundings<Word>> {
+        val statementComplements = mutableListOf<AwareOfSurroundings<Word>>()
         isNounPossible = true
 
-        statementComplements += result.textParts.filter { statement.endAt < it.startAt && it is Word }                   // get words after statement
-                .map { it as Word }
-                .takeWhile { canBePartOfComplement(it) }
+        var wordAwareOfSurroundings: AwareOfSurroundings<Word>? = statement.wordAfter
+
+        while (wordAwareOfSurroundings?.let { canBePartOfComplement(it.base) } == true) {
+            statementComplements += wordAwareOfSurroundings
+            wordAwareOfSurroundings = wordAwareOfSurroundings.wordAfter
+        }
 
         return statementComplements
     }
