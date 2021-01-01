@@ -15,19 +15,19 @@ open class CommaBeforeWordsRule(ruleExpectedText: String) : CommaRule {
     override fun check(analyseData: TextAnalyseData): Iterable<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
 
-        val commaBeforeWordGrouped = findExpectedPatternInData(analyseData)
+        val foundPatterns = findExpectedPatternInData(analyseData)
+        val foundPatternsWithAndWithoutCommas = foundPatterns.groupBy { hasCommaBeforeWord(it) }
 
-        possibleChanges += convertFoundsWithoutCommaIntoPossibleChange(commaBeforeWordGrouped[false])
-        possibleChanges += findFoundsWithInvalidCommaAndSpaceOrder(commaBeforeWordGrouped[true])
+        possibleChanges += convertFoundsWithoutCommaIntoPossibleChange(foundPatternsWithAndWithoutCommas[false])
+        possibleChanges += findFoundsWithInvalidCommaAndSpaceOrder(foundPatternsWithAndWithoutCommas[true])
 
-        return possibleChanges
+        return possibleChanges.toList()
     }
 
-    private fun findExpectedPatternInData(analyseData: TextAnalyseData): Map<Boolean, List<List<AwareOfSurroundings<Word>>>> {
+    protected fun findExpectedPatternInData(analyseData: TextAnalyseData): Sequence<List<AwareOfSurroundings<Word>>> {
         val textWithOnlyWords = TextWithOnlyWords(analyseData)
         val patternMatches = pattern.findAll(textWithOnlyWords.text.toUpperCase())
         return patternMatches.map { getOriginalWordsInRangeFromMatchResult(it, textWithOnlyWords) }
-            .groupBy { hasCommaBeforeWord(it) }
     }
 
     private fun getOriginalWordsInRangeFromMatchResult(matchResult: MatchResult, textWithOnlyWords: TextWithOnlyWords)
@@ -41,16 +41,16 @@ open class CommaBeforeWordsRule(ruleExpectedText: String) : CommaRule {
         return words.toList()
     }
 
-    private fun hasCommaBeforeWord(words: List<AwareOfSurroundings<Word>>): Boolean =
+    protected fun hasCommaBeforeWord(words: List<AwareOfSurroundings<Word>>): Boolean =
         words.first().partsBetweenEarlierWord.any { it.get() == "," }
 
-    private fun convertFoundsWithoutCommaIntoPossibleChange(foundsWithoutComma: List<List<AwareOfSurroundings<Word>>>?) =
+    protected fun convertFoundsWithoutCommaIntoPossibleChange(foundsWithoutComma: List<List<AwareOfSurroundings<Word>>>?) =
         foundsWithoutComma?.let { foundWords ->
             foundWords.mapNotNull { it.first().partsBetweenEarlierWord.firstOrNull()?.startAt }
                 .map { PossibleChange(ChangeType.INSERT, it, new = ",") }
         } ?: listOf()
 
-    private fun findFoundsWithInvalidCommaAndSpaceOrder(foundsWithComma: List<List<AwareOfSurroundings<Word>>>?) =
+    protected fun findFoundsWithInvalidCommaAndSpaceOrder(foundsWithComma: List<List<AwareOfSurroundings<Word>>>?) =
         foundsWithComma?.let { foundWords ->
             foundWords.filter { hasBeforeExactCommaAndSeparator(it) }
                 .map { words ->

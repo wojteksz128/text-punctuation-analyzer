@@ -1,6 +1,7 @@
 package net.wojteksz128.tpa.polish.validator.comma
 
 import net.wojteksz128.tpa.TextAnalyseData
+import net.wojteksz128.tpa.polish.validator.comma.rule.CommaBeforeWordsIfWordIsNotParticleRule
 import net.wojteksz128.tpa.polish.validator.comma.rule.CommaBeforeWordsRule
 import net.wojteksz128.tpa.polish.validator.comma.rule.CommaRule
 import net.wojteksz128.tpa.text.PossibleChange
@@ -9,7 +10,7 @@ import net.wojteksz128.tpa.text.TextValidator
 object CommaAsSentencesSeparatorValidator : TextValidator {
     // TODO: 10.12.2020 Zamień na wczytywanie jsona z konfiguracją
     private val rules: Collection<CommaRule> = listOf(
-        CommaBeforeWordsRule("aby"),
+        CommaBeforeWordsIfWordIsNotParticleRule("aby"),
         CommaBeforeWordsRule("aczkolwiek"),
         CommaBeforeWordsRule("aż"),
         CommaBeforeWordsRule("ażeby"),
