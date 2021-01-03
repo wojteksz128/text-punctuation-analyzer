@@ -6,14 +6,19 @@ import net.wojteksz128.tpa.utils.dag.grammar.GrammarClass
 import net.wojteksz128.tpa.utils.dag.grammar.PartOfSpeech
 
 // TODO: 01.01.2021 Może warto zwracać procent poprawności odpowiedzi w oparciu o pozostałe rezultaty?
-infix fun Word.isTypeOf(partOfSpeech: PartOfSpeech) = possibleCategories
-        .any { it.textPartSpecification.grammarClass.partOfSpeech == partOfSpeech }
+infix fun Word.isTypeOf(partOfSpeech: PartOfSpeech) =
+        possibleCategories.firstOrNull()
+                ?.let { it.textPartSpecification.grammarClass.partOfSpeech == partOfSpeech } == true
 
-infix fun Word.isClassOf(grammarClass: GrammarClass) = possibleCategories
-        .any { it.textPartSpecification.grammarClass == grammarClass }
+// TODO: 01.01.2021 Może warto zwracać procent poprawności odpowiedzi w oparciu o pozostałe rezultaty?
+infix fun Word.isClassOf(grammarClass: GrammarClass) =
+        possibleCategories.firstOrNull()?.let { it.textPartSpecification.grammarClass == grammarClass } == true
 
-fun Word.haveAnyOf(vararg categories: GrammarCategory) = possibleCategories
-        .any { decoded -> decoded.textPartSpecification.wordCategories.any { it in categories } }
+// TODO: 01.01.2021 Może warto zwracać procent poprawności odpowiedzi w oparciu o pozostałe rezultaty?
+fun Word.haveAnyOf(vararg categories: GrammarCategory) =
+        possibleCategories.firstOrNull()
+                ?.let { decoded -> decoded.textPartSpecification.wordCategories.any { it in categories } } == true
 
-fun Word.haveAllOf(vararg categories: GrammarCategory) = possibleCategories
-        .any { decoded -> decoded.textPartSpecification.wordCategories.containsAll(categories.toList()) }
+// TODO: 01.01.2021 Może warto zwracać procent poprawności odpowiedzi w oparciu o pozostałe rezultaty?
+fun Word.haveAllOf(vararg categories: GrammarCategory) =
+        possibleCategories.firstOrNull()?.textPartSpecification?.wordCategories?.containsAll(categories.toList()) == true
