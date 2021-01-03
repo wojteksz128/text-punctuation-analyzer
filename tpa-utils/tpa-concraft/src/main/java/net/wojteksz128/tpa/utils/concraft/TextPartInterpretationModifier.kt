@@ -30,9 +30,9 @@ object TextPartInterpretationModifier {
         val combinationsOfAlternatives = prepareCombinationsOfAlternatives(alternativeCategoriesGroups)
         return combinationsOfAlternatives.map { alternativeGroups ->
             val newCategories = wordCategories + alternativeGroups
-            var newTag = tag
-            (alternativeCategories - alternativeGroups).map { category -> category.shortcut }
-                    .forEach { newTag = newTag.replace(if (newTag.contains("$it.")) "$it." else ".$it", "") }
+            val categoriesShortcutsToRemove =
+                (alternativeCategories - alternativeGroups).map { category -> category.shortcut }
+            var newTag = prepareTagWithRemovedCategories(tag, categoriesShortcutsToRemove)
             val orth = interpretation.textPartSpecification.orth
             val lemma = interpretation.textPartSpecification.lemma
             val tagId = interpretation.textPartSpecification.tagId
@@ -41,21 +41,46 @@ object TextPartInterpretationModifier {
             val labelsId = interpretation.textPartSpecification.labelsId
             val labels = interpretation.textPartSpecification.labels
             val grammarClass = interpretation.textPartSpecification.grammarClass
-            val specification = TextPartSpecification(orth, lemma, tagId, newTag, nameId, name, labelsId, labels,
-                    grammarClass, newCategories)
+            val specification = TextPartSpecification(
+                orth, lemma, tagId, newTag, nameId, name, labelsId, labels,
+                grammarClass, newCategories
+            )
             TextPartInterpretation(interpretation.nodeInfo, specification)
         }
     }
 
-    private fun prepareCombinationsOfAlternatives(alternativeCategoriesGroups: List<List<GrammarCategory>>,
-                                                  partialCombination: List<GrammarCategory> = listOf()): List<List<GrammarCategory>> {
+    private fun prepareTagWithRemovedCategories(tag: String, categoriesShortcutsToRemove: List<String>): String {
+        var newTag = tag
+        val foundShortcuts = categoriesShortcutsToRemove
+            .map { Pair(it, "(^$it$|^$it[.:]|[.:]$it[.:]|[.:]$it$)".toRegex().find(tag)) }.filter { it.second != null }
+            .sortedByDescending { it.second?.range?.first }
+
+        foundShortcuts.forEach { pair: Pair<String, MatchResult?> ->
+            val matchResult = pair.second!!
+            val shortcut = pair.first
+            val replacedText = when (newTag.subSequence(matchResult.range)) {
+                ":$shortcut:", ":$shortcut.", ".$shortcut:" -> ":"
+                ".$shortcut." -> "."
+                else -> ""
+            }
+            newTag = newTag.replaceRange(matchResult.range, replacedText)
+        }
+
+        return newTag
+    }
+
+    private fun prepareCombinationsOfAlternatives(
+        alternativeCategoriesGroups: List<List<GrammarCategory>>,
+        partialCombination: List<GrammarCategory> = listOf()
+    ): List<List<GrammarCategory>> {
         val combinations = mutableListOf<List<GrammarCategory>>()
 
         alternativeCategoriesGroups[0].forEach { category ->
             combinations += if (alternativeCategoriesGroups.size == 1) {
                 listOf(partialCombination + category)
             } else {
-                prepareCombinationsOfAlternatives(alternativeCategoriesGroups.drop(1),
+                prepareCombinationsOfAlternatives(
+                    alternativeCategoriesGroups.drop(1),
                         partialCombination + category)
             }
         }
