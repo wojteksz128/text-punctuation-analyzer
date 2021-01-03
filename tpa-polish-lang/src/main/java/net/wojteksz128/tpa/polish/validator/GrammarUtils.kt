@@ -14,6 +14,9 @@ infix fun Word.isTypeOf(partOfSpeech: PartOfSpeech) =
 infix fun Word.isClassOf(grammarClass: GrammarClass) =
         possibleCategories.firstOrNull()?.let { it.textPartSpecification.grammarClass == grammarClass } == true
 
+fun Word.isAnyClassOf(vararg grammarClasses: GrammarClass) =
+        possibleCategories.firstOrNull()?.let { it.textPartSpecification.grammarClass in grammarClasses } == true
+
 // TODO: 01.01.2021 Może warto zwracać procent poprawności odpowiedzi w oparciu o pozostałe rezultaty?
 fun Word.haveAnyOf(vararg categories: GrammarCategory) =
         possibleCategories.firstOrNull()
