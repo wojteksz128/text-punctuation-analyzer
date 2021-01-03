@@ -43,6 +43,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.beust</groupId>
             <artifactId>klaxon</artifactId>
             <version>5.4</version>
