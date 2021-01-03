@@ -1,65 +1,61 @@
 package net.wojteksz128.tpa.polish.validator.dot
 
 import net.wojteksz128.tpa.TextAnalyseData
-import net.wojteksz128.tpa.polish.validator.StatementGroup
+import net.wojteksz128.tpa.polish.validator.Sentence
 import net.wojteksz128.tpa.polish.validator.markAfter
 import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.SENTENCE_GROUP
-import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.STATEMENT_GROUP
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
-import net.wojteksz128.tpa.text.part.AwareOfSurroundings
-import net.wojteksz128.tpa.text.part.TextPart
 
+// TODO: 03.01.2021 Sprawdzaj wielkość liter
 object DotAtSentenceEndValidator : TextValidator {
 
     override fun validate(analyseData: TextAnalyseData): List<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
 
         possibleChanges += findSentenceWithoutDotAtEnd(analyseData)
-        possibleChanges += findDotInsideStatementGroup(analyseData)
         possibleChanges += findIncorrectPlacedDot(analyseData)
+// TODO: 03.01.2021 Sprawdzaj, czy jest ciąg ". ", czy nie " ."
+//        possibleChanges += findDotAndSeparatorInWrongOrder(analyseData)
 
         return possibleChanges
     }
 
     private fun findSentenceWithoutDotAtEnd(analyseData: TextAnalyseData): Iterable<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
-        val additionalParts = analyseData.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
+        val additionalParts = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
 
-        additionalParts.map { it as AwareOfSurroundings<*> }.forEach {
-            if (!markAfter(".", it)) {
-                possibleChanges += PossibleChange(ChangeType.INSERT, it.endAt + 1, new = ".")
+        additionalParts.map { it as Sentence }.forEach { sentence ->
+            val lastWord = sentence.lastWord
+            if (!markAfter(".", lastWord)) {
+                possibleChanges += PossibleChange(ChangeType.INSERT, lastWord.endAt + 1, new = ".")
             }
         }
 
         return possibleChanges
     }
 
-    private fun findDotInsideStatementGroup(analyseData: TextAnalyseData): Iterable<PossibleChange> {
-        val statementGroups = analyseData.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
+    private fun findIncorrectPlacedDot(analyseData: TextAnalyseData): Iterable<PossibleChange> {
+        val sentencesObjects = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
 
-        return statementGroups.map { it as AwareOfSurroundings<*> }
+        return sentencesObjects.map { it as Sentence }
+            .flatMap { it.subjectWords + it.statementWord + it.complementWords }
+            .dropLast(1)
+            .flatMap { it.partsBetweenLaterWord }
+            .filter { it.get() == "." }
+            .map { PossibleChange(ChangeType.DELETE, it.startAt, old = it.get()) }
+    }
+
+    /*private fun findDotAndSeparatorInWrongOrder(analyseData: TextAnalyseData): Iterable<PossibleChange> {
+        val statementGroups = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
+
+        return statementGroups.map { it as Sentence }
             .flatMap { findIncorrectEndedWords(it) }
             .map { PossibleChange(ChangeType.DELETE, it.endAt + 1, old = ".") }
     }
 
     private fun findIncorrectEndedWords(awareOfSurroundings: AwareOfSurroundings<*>) =
         (awareOfSurroundings.base as StatementGroup).items.sortedBy { it.startAt }.dropLast(1)
-            .filter { markAfter(".", it) }
-
-    private fun findIncorrectPlacedDot(analyseData: TextAnalyseData): Iterable<PossibleChange> {
-        val list = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
-        val statementGroups = analyseData.additionalParts[STATEMENT_GROUP.name] ?: listOf<Any>()
-
-        return list.map { it as List<*> }
-            .filter { sentenceParts ->
-                statementGroups.map { ((it as AwareOfSurroundings<*>).base as StatementGroup).items }
-                    .none { sentenceParts.containsAll(it) }
-            }
-            .map {
-                val lastSentencePart = it.last() as TextPart
-                PossibleChange(ChangeType.DELETE, lastSentencePart.startAt, old = lastSentencePart.get())
-            }
-    }
+            .filter { markAfter(".", it) }*/
 }

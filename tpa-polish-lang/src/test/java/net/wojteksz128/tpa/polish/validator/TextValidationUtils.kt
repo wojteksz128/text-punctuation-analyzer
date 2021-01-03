@@ -4,7 +4,7 @@ import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
-import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
+//import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidatorPreparer
@@ -25,7 +25,10 @@ object TextValidationUtils {
         function: (TextAnalyseData) -> List<PossibleChange>
     ) {
         val example =
-            prepareTextAnalyseResult(text, listOf(StatementGroupTextValidatorPreparer, SentenceGroupValidatorPreparer))
+            prepareTextAnalyseResult(
+                text,
+                listOf(/*StatementGroupTextValidatorPreparer, */SentenceGroupValidatorPreparer)
+            )
         val possibleChanges = function(example)
         val missing = expected.toMutableList()
         missing.removeIf { possibleChanges.contains(it) }

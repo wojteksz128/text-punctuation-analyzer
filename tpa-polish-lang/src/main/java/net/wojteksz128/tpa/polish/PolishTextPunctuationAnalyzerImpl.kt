@@ -7,13 +7,13 @@ import net.wojteksz128.tpa.polish.validator.comma.CommaAsSentencesSeparatorValid
 import net.wojteksz128.tpa.polish.validator.dot.DotAtSentenceEndValidator
 import net.wojteksz128.tpa.polish.validator.dot.DotAtTheEndOfShortcutValidator
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
-import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
+//import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 
 class PolishTextPunctuationAnalyzerImpl
     : TextPunctuationAnalyzer(
     DefaultTextDividerImpl(LanguageAlphabetLoader.load()),
     PolishWordsClassifier.instance,
-    validatorPreparers = listOf(StatementGroupTextValidatorPreparer, SentenceGroupValidatorPreparer),
+    validatorPreparers = listOf(/*StatementGroupTextValidatorPreparer, */SentenceGroupValidatorPreparer),
     validators = listOf(DotAtSentenceEndValidator, DotAtTheEndOfShortcutValidator, CommaAsSentencesSeparatorValidator)
 )
