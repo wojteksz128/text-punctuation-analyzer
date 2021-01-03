@@ -42,7 +42,7 @@ open class CommaBeforeWordsRule(ruleExpectedText: String) : CommaRule {
     }
 
     protected fun hasCommaBeforeWord(words: List<AwareOfSurroundings<Word>>): Boolean =
-        words.first().partsBetweenEarlierWord.any { it.get() == "," }
+        words.first().partsBetweenEarlierWord.any { it.text == "," }
 
     protected fun convertFoundsWithoutCommaIntoPossibleChange(foundsWithoutComma: List<List<AwareOfSurroundings<Word>>>?) =
         foundsWithoutComma?.let { foundWords ->
@@ -55,13 +55,13 @@ open class CommaBeforeWordsRule(ruleExpectedText: String) : CommaRule {
             foundWords.filter { hasBeforeExactCommaAndSeparator(it) }
                 .map { words ->
                     val earlierWord = words.first().partsBetweenEarlierWord
-                    Pair(earlierWord.first().startAt, earlierWord.joinToString("") { it.get() })
+                    Pair(earlierWord.first().startAt, earlierWord.joinToString("") { it.text })
                 }
                 .map { PossibleChange(ChangeType.REPLACE, it.first, it.second, ", ") }
         } ?: listOf()
 
     private fun hasBeforeExactCommaAndSeparator(words: List<AwareOfSurroundings<Word>>): Boolean {
         val beforeWords = words.first().partsBetweenEarlierWord
-        return !(beforeWords.size == 2 && beforeWords.joinToString("") { it.get() } == ", ")
+        return !(beforeWords.size == 2 && beforeWords.joinToString("") { it.text } == ", ")
     }
 }

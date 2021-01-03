@@ -22,7 +22,7 @@ open class MorfeuszClassifier : Classifier {
         var textPart: TextPart? = null
 
         return interpretationList.groupBy { "${it.startNode}_${it.orth}" }.forEach { interpretation ->
-            while (textPart == null || !interpretation.key.contains(textPart!!.get()))
+            while (textPart == null || !interpretation.key.contains(textPart!!.text))
                 textPart = iterator.next()
 
             interpretation.value.mapNotNull { MorphInterpretationConverter.convert(it, morfeuszInstance) }.forEach {

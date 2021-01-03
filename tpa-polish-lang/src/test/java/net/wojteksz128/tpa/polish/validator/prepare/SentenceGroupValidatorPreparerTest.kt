@@ -86,17 +86,19 @@ internal class SentenceGroupValidatorPreparerTest {
     }
 
     private fun thenSentenceSubjectWordsHasWords(expectedSentence: ExpectedSentence, sentence: Sentence) =
-        thenSentenceWordsCollectionHasWords(expectedSentence, sentence, ExpectedSentence::subjectWords,
-            { s -> s.subjectWords.map { it.get() } }, "Subject words"
+        thenSentenceWordsCollectionHasWords(
+            expectedSentence, sentence, ExpectedSentence::subjectWords,
+            { s -> s.subjectWords.map { it.text } }, "Subject words"
         )
 
     private fun thenSentenceStatementIsEqual(expectedStatement: String, sentence: Sentence) {
-        assertEquals(expectedStatement, sentence.statementWord.get(), "Statement word in sentence is not the same")
+        assertEquals(expectedStatement, sentence.statementWord.text, "Statement word in sentence is not the same")
     }
 
     private fun thenSentenceComplementWordsHasWords(expectedSentence: ExpectedSentence, sentence: Sentence) =
-        thenSentenceWordsCollectionHasWords(expectedSentence, sentence, ExpectedSentence::complementWords,
-            { s -> s.complementWords.map { it.get() } }, "Complement words"
+        thenSentenceWordsCollectionHasWords(
+            expectedSentence, sentence, ExpectedSentence::complementWords,
+            { s -> s.complementWords.map { it.text } }, "Complement words"
         )
 
     private fun thenSentenceWordsCollectionHasWords(

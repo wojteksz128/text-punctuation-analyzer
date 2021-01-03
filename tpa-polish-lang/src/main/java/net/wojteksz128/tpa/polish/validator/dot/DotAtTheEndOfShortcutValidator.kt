@@ -44,7 +44,7 @@ object DotAtTheEndOfShortcutValidator : TextValidator {
         get() {
             this.possibleCategories.any { it.textPartSpecification.grammarClass == Klasa.SKROT }
 
-            val decodedWordWithDot = PolishWordsClassifier.instance.classify("${this.get()}.")
+            val decodedWordWithDot = PolishWordsClassifier.instance.classify("${this.text}.")
             return decodedWordWithDot.any { it.textPartSpecification.grammarClass == Klasa.SKROT }
                     && decodedWordWithDot.intersect(this.possibleCategories)
                 .none { it.textPartSpecification.grammarClass == Klasa.SKROT }

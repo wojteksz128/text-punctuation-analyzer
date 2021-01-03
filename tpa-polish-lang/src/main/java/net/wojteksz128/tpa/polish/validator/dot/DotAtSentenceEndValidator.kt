@@ -43,8 +43,8 @@ object DotAtSentenceEndValidator : TextValidator {
             .flatMap { it.subjectWords + it.statementWord + it.complementWords }
             .dropLast(1)
             .flatMap { it.partsBetweenLaterWord }
-            .filter { it.get() == "." }
-            .map { PossibleChange(ChangeType.DELETE, it.startAt, old = it.get()) }
+            .filter { it.text == "." }
+            .map { PossibleChange(ChangeType.DELETE, it.startAt, old = it.text) }
     }
 
     /*private fun findDotAndSeparatorInWrongOrder(analyseData: TextAnalyseData): Iterable<PossibleChange> {

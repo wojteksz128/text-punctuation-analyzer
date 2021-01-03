@@ -11,7 +11,7 @@ data class TextWithOnlyWords(val analyseData: TextAnalyseData) {
     init {
         sourceTextWordsInInternalTextMap = prepareWordsMap(analyseData.words)
         text =
-            sourceTextWordsInInternalTextMap.values.joinToString(analyseData.languageAlphabet.separators.first()) { it.get() }
+            sourceTextWordsInInternalTextMap.values.joinToString(analyseData.languageAlphabet.separators.first()) { it.text }
     }
 
     private fun prepareWordsMap(words: List<AwareOfSurroundings<Word>>): Map<Long, AwareOfSurroundings<Word>> {

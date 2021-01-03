@@ -75,6 +75,6 @@ internal class DefaultTextDividerImplTest {
 
     private inline fun <reified T> thenPartIs(first: TextPart, second: TestTextPart) {
         Assertions.assertTrue { first is T }
-        Assertions.assertEquals(first.get(), second.getText())
+        Assertions.assertEquals(first.text, second.getText())
     }
 }

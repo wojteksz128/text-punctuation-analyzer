@@ -1,7 +1,7 @@
 package net.wojteksz128.tpa.text.part
 
 class AwareOfSurroundings<T : TextPart>(val base: T) :
-    TextPart(base.text, base.startAt, base.endAt, base.possibleCategories) {
+    TextPart(base.fullText, base.startAt, base.endAt, base.possibleCategories) {
 
     var wordBefore: AwareOfSurroundings<Word>? = null
         private set

@@ -39,7 +39,7 @@ private fun printRecognizedParts(recognizingText: String, result: TextAnalyseRes
     println("\rRozpoznano:")
     result.textParts.forEach { textPart ->
         println(
-            " -\t${textPart.javaClass.simpleName} '${textPart.get()}' na pozycji ${textPart.startAt}-${textPart.endAt} " +
+            " -\t${textPart.javaClass.simpleName} '${textPart.text}' na pozycji ${textPart.startAt}-${textPart.endAt} " +
                     if (textPart.possibleCategories.isNotEmpty()) "sklasyfikowany jako:" else "bez klasyfikacji"
         )
         textPart.possibleCategories.forEach { println("\t\t${formatToPrint(it)}") }
