@@ -7,8 +7,9 @@ import net.wojteksz128.tpa.polish.validator.prepare.PolishAdditionalPartsName.SE
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
+import net.wojteksz128.tpa.text.part.AwareOfSurroundings
+import net.wojteksz128.tpa.text.part.Word
 
-// TODO: 03.01.2021 Sprawdzaj wielkość liter
 object DotAtSentenceEndValidator : TextValidator {
 
     override fun validate(analyseData: TextAnalyseData): List<PossibleChange> {
@@ -16,25 +17,46 @@ object DotAtSentenceEndValidator : TextValidator {
 
         possibleChanges += findSentenceWithoutDotAtEnd(analyseData)
         possibleChanges += findIncorrectPlacedDot(analyseData)
-// TODO: 03.01.2021 Sprawdzaj, czy jest ciąg ". ", czy nie " ."
-//        possibleChanges += findDotAndSeparatorInWrongOrder(analyseData)
 
         return possibleChanges
     }
 
     private fun findSentenceWithoutDotAtEnd(analyseData: TextAnalyseData): Iterable<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
-        val additionalParts = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
+        val sentences = analyseData.additionalParts[SENTENCE_GROUP.name]?.map { it as Sentence } ?: listOf()
 
-        additionalParts.map { it as Sentence }.forEach { sentence ->
-            val lastWord = sentence.lastWord
-            if (!markAfter(".", lastWord)) {
-                possibleChanges += PossibleChange(ChangeType.INSERT, lastWord.endAt + 1, new = ".")
+        sentences.filter { !markAfter(".", it.lastWord) }
+            .map { it.lastWord }
+            .forEach { lastWord ->
+                val replaceNextWord = findRequiredNextWordReplace(lastWord)
+                possibleChanges += if (isAfterOtherPunctuationMark(
+                        lastWord,
+                        analyseData
+                    ) || replaceNextWord.containsChange
+                ) {
+                    val afterWord = lastWord.partsBetweenLaterWord
+                    PossibleChange(
+                        ChangeType.REPLACE,
+                        afterWord.first().startAt,
+                        "${afterWord.joinToString("")}${replaceNextWord.old}",
+                        ". ${replaceNextWord.new}"
+                    )
+                } else
+                    PossibleChange(ChangeType.INSERT, lastWord.endAt.inc(), new = ".")
             }
-        }
 
         return possibleChanges
     }
+
+    private fun findRequiredNextWordReplace(lastWord: AwareOfSurroundings<Word>): ReplaceStrings {
+        return if (lastWord.wordAfter?.text?.first()?.isLowerCase() == true) ReplaceStrings(
+            lastWord.wordAfter!!.text.first().toString(),
+            lastWord.wordAfter!!.text.first().toUpperCase().toString()
+        ) else ReplaceStrings("", "")
+    }
+
+    private fun isAfterOtherPunctuationMark(lastWord: AwareOfSurroundings<Word>, analyseData: TextAnalyseData) =
+        lastWord.partsBetweenLaterWord.any { sign -> analyseData.languageAlphabet.separators.none { it == sign.text } }
 
     private fun findIncorrectPlacedDot(analyseData: TextAnalyseData): Iterable<PossibleChange> {
         val sentencesObjects = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
@@ -47,15 +69,8 @@ object DotAtSentenceEndValidator : TextValidator {
             .map { PossibleChange(ChangeType.DELETE, it.startAt, old = it.text) }
     }
 
-    /*private fun findDotAndSeparatorInWrongOrder(analyseData: TextAnalyseData): Iterable<PossibleChange> {
-        val statementGroups = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
-
-        return statementGroups.map { it as Sentence }
-            .flatMap { findIncorrectEndedWords(it) }
-            .map { PossibleChange(ChangeType.DELETE, it.endAt + 1, old = ".") }
+    private data class ReplaceStrings(val old: String, val new: String) {
+        val containsChange: Boolean
+            get() = old.isNotEmpty() && new.isNotEmpty() && old != new
     }
-
-    private fun findIncorrectEndedWords(awareOfSurroundings: AwareOfSurroundings<*>) =
-        (awareOfSurroundings.base as StatementGroup).items.sortedBy { it.startAt }.dropLast(1)
-            .filter { markAfter(".", it) }*/
 }

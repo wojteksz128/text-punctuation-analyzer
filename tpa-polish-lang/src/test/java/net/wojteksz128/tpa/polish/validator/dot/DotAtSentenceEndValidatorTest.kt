@@ -36,11 +36,12 @@ internal class DotAtSentenceEndValidatorTest {
         @ConvertWith(
             StringToIntArrayConverter::class
         ) position: IntArray,
-        replacedSign: String
+        replacedFrom: String,
+        replacedTo: String
     ) {
         verifyTextPossibleChanges(
             text,
-            convertToReplacePossibleChanges(position, replacedSign, ".")
+            convertToReplacePossibleChanges(position, replacedFrom, replacedTo)
         ) { DotAtSentenceEndValidator.validate(it) }
     }
 
