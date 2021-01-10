@@ -18,13 +18,27 @@ internal class DotAtTheEndOfShortcutValidatorTest {
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
     @CsvFileSource(resources = ["/dotAtTheEndOfShortcut/insert_dots.csv"], numLinesToSkip = 1)
-    fun `Verification returns possible dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
-        verifyTextPossibleChanges(text, convertToInsertPossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
+    fun `Verification returns possible dot in list of possible changes`(
+        text: String,
+        @ConvertWith(StringToIntArrayConverter::class) position: IntArray
+    ) {
+        verifyTextPossibleChanges(
+            text,
+            convertToInsertPossibleChanges(position, ".")
+        ) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
+
+    // TODO: 09.01.2021 create replace to dot tests
 
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
     @CsvFileSource(resources = ["/dotAtTheEndOfShortcut/delete_dots.csv"], numLinesToSkip = 1)
-    fun `Verification returns possible deleting dot in list of possible changes`(text: String, @ConvertWith(StringToIntArrayConverter::class) position: IntArray) {
-        verifyTextPossibleChanges(text, TextValidationUtils.convertToDeletePossibleChanges(position, ".")) { DotAtTheEndOfShortcutValidator.validate(it) }
+    fun `Verification returns possible deleting dot in list of possible changes`(
+        text: String,
+        @ConvertWith(StringToIntArrayConverter::class) position: IntArray
+    ) {
+        verifyTextPossibleChanges(
+            text,
+            TextValidationUtils.convertToDeletePossibleChanges(position, ".")
+        ) { DotAtTheEndOfShortcutValidator.validate(it) }
     }
 }

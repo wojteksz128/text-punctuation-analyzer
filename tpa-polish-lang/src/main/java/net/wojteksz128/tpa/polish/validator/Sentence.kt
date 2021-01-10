@@ -8,9 +8,13 @@ class Sentence private constructor(
     val statementWord: AwareOfSurroundings<Word>,
     val complementWords: List<AwareOfSurroundings<Word>>
 ) {
+    val firstWord: AwareOfSurroundings<Word>
+        get() = subjectWords.firstOrNull() ?: statementWord
 
     val lastWord: AwareOfSurroundings<Word>
         get() = complementWords.lastOrNull() ?: statementWord
+
+    val range = firstWord.startAt..(lastWord.partsBetweenLaterWord.lastOrNull()?.endAt ?: lastWord.endAt)
 
     data class Builder(
         val subjectWords: MutableList<AwareOfSurroundings<Word>> = mutableListOf(),

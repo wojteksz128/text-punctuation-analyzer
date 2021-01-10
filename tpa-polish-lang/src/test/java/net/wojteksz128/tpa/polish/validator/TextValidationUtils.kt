@@ -4,7 +4,6 @@ import net.wojteksz128.tpa.TextAnalyseData
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.polish.split.PolishWordsClassifier
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
-//import net.wojteksz128.tpa.polish.validator.prepare.StatementGroupTextValidatorPreparer
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidatorPreparer
@@ -24,11 +23,7 @@ object TextValidationUtils {
         expected: List<PossibleChange>,
         function: (TextAnalyseData) -> List<PossibleChange>
     ) {
-        val example =
-            prepareTextAnalyseResult(
-                text,
-                listOf(/*StatementGroupTextValidatorPreparer, */SentenceGroupValidatorPreparer)
-            )
+        val example = prepareTextAnalyseResult(text, listOf(SentenceGroupValidatorPreparer))
         val possibleChanges = function(example)
         val missing = expected.toMutableList()
         missing.removeIf { possibleChanges.contains(it) }
@@ -49,9 +44,8 @@ object TextValidationUtils {
         return position.map { PossibleChange(ChangeType.INSERT, it, new = sign) }
     }
 
-    @Suppress("unused")
-    fun convertToReplacePossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
-        return position.map { PossibleChange(ChangeType.REPLACE, it, new = sign) }
+    fun convertToReplacePossibleChanges(position: IntArray, oldSign: String, newSign: String): List<PossibleChange> {
+        return position.map { PossibleChange(ChangeType.REPLACE, it, oldSign, newSign) }
     }
 
     fun convertToDeletePossibleChanges(position: IntArray, sign: String): List<PossibleChange> {
