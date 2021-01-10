@@ -10,7 +10,7 @@ import net.wojteksz128.tpa.utils.dag.grammar.PartOfSpeech
 object CommaAsSentencesSeparatorValidator : TextValidator {
     // TODO: 10.12.2020 Zamień na wczytywanie jsona z konfiguracją
     private val rules: Collection<Rule> = listOf(
-        Rule.Builder().forPunctuationMark(",").markBeforePhrase("aby")
+        Rule.Builder().forPunctuationMark(",").markBeforePhrase("aby").exclude("tak aby")
             .phraseIsNot { it.first().base.isTypeOf(PartOfSpeech.PARTICLE) }
             .build(),// TODO: 09.01.2021 To może nie być do końca poprawne
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("aczkolwiek").build(),

@@ -16,10 +16,10 @@ import net.wojteksz128.tpa.text.part.Word
 open class Rule private constructor(
     private val punctuationMark: String,
     phrase: String,
-    private val phraseFilters: MutableList<(List<AwareOfSurroundings<Word>>) -> Boolean>
+    private val phraseFilters: List<(List<AwareOfSurroundings<Word>>) -> Boolean>,
+    excludePhrases: List<String>
 ) {
-    private val pattern: Regex =
-        Regex("(\\W(${phrase.toUpperCase()})\\W|^(${phrase.toUpperCase()})\\W)")
+    private val patternFinder = PhraseFinder(phrase, excludePhrases)
 
     fun check(analyseData: TextAnalyseData): Iterable<PossibleChange> {
         val possibleChanges = mutableListOf<PossibleChange>()
@@ -34,22 +34,10 @@ open class Rule private constructor(
 
     private fun findExpectedPatternInData(analyseData: TextAnalyseData): Pair<List<List<AwareOfSurroundings<Word>>>, List<List<AwareOfSurroundings<Word>>>> {
         val textWithOnlyWords = TextWithOnlyWords(analyseData)
-        var map = pattern.findAll(textWithOnlyWords.text.toUpperCase())
-            .map { getOriginalWordsInRangeFromMatchResult(it, textWithOnlyWords) }
+        var map = patternFinder.findPhrase(textWithOnlyWords)
         phraseFilters.forEach { phraseFilter -> map = map.filter { phraseFilter(it) } }
         val groupBy = map.groupBy { hasMarkBeforeWord(it) }
         return Pair(groupBy[false] ?: listOf(), groupBy[true] ?: listOf())
-    }
-
-    private fun getOriginalWordsInRangeFromMatchResult(matchResult: MatchResult, textWithOnlyWords: TextWithOnlyWords)
-            : List<AwareOfSurroundings<Word>> {
-        val words = mutableListOf<AwareOfSurroundings<Word>>()
-        matchResult.range.forEach { position ->
-            if (textWithOnlyWords.sourceTextWordsInInternalTextMap.containsKey(position.toLong())) {
-                textWithOnlyWords.sourceTextWordsInInternalTextMap[position.toLong()]?.let { words.add(it) }
-            }
-        }
-        return words.toList()
     }
 
     private fun hasMarkBeforeWord(words: List<AwareOfSurroundings<Word>>): Boolean =
@@ -110,6 +98,7 @@ open class Rule private constructor(
         private lateinit var phrase: String
         private lateinit var punctuationMark: String
         private val phraseFilters = mutableListOf<(List<AwareOfSurroundings<Word>>) -> Boolean>()
+        private val excludePhrases = mutableListOf<String>()
 
         fun forPunctuationMark(punctuationMark: String) = apply { this.punctuationMark = punctuationMark }
 
@@ -119,6 +108,10 @@ open class Rule private constructor(
             phraseFilters.add { !phraseFilter(it) }
         }
 
-        fun build() = Rule(punctuationMark, phrase, phraseFilters)
+        fun exclude(phrase: String) = apply {
+            excludePhrases.add(phrase)
+        }
+
+        fun build() = Rule(punctuationMark, phrase, phraseFilters.toList(), excludePhrases.toList())
     }
 }
