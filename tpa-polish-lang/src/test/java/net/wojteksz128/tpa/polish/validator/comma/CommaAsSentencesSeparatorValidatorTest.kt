@@ -9,6 +9,12 @@ import org.junit.jupiter.params.provider.CsvFileSource
 
 internal class CommaAsSentencesSeparatorValidatorTest {
 
+    @ParameterizedTest(name = "{index}. text=\"{0}\"")
+    @CsvFileSource(resources = ["/commaAsSentencesSeparator/correct.csv"], numLinesToSkip = 1)
+    fun `Verification returns empty list of possible changes`(text: String) {
+        verifyTextPossibleChanges(text, listOf()) { CommaAsSentencesSeparatorValidator.validate(it) }
+    }
+
     @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
     @CsvFileSource(resources = ["/commaAsSentencesSeparator/insert_commas.csv"], numLinesToSkip = 1)
     fun `Verification returns possible inserting comma in list of possible changes`(

@@ -18,6 +18,7 @@ object TextValidationUtils {
     private val classifier = PolishWordsClassifier.instance
     private val textDivider = DefaultTextDividerImpl(alphabet)
 
+    // TODO: 10.01.2021 Nic nie jest sprawdzane dla poprawnych stwierdzeń :( Jeśli pusta jest lista oczekiwanych zmian
     fun verifyTextPossibleChanges(
         text: String,
         expected: List<PossibleChange>,
