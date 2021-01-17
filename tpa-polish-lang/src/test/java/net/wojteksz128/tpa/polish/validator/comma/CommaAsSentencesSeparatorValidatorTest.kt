@@ -1,5 +1,6 @@
 package net.wojteksz128.tpa.polish.validator.comma
 
+import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToDeletePossibleChanges
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.convertToInsertPossibleChanges
 import net.wojteksz128.tpa.polish.validator.TextValidationUtils.verifyTextPossibleChanges
 import net.wojteksz128.tpa.polish.validator.utils.StringToIntArrayConverter
@@ -29,7 +30,19 @@ internal class CommaAsSentencesSeparatorValidatorTest {
         ) { CommaAsSentencesSeparatorValidator.validate(it) }
     }
 
-    // TODO: 09.01.2021 create nothing to change tests
+    @ParameterizedTest(name = "{index}. text=\"{0}\", position={1}")
+    @CsvFileSource(resources = ["/commaAsSentencesSeparator/delete_commas.csv"], numLinesToSkip = 1)
+    fun `Verification returns possible deleting comma in list of possible changes`(
+        text: String,
+        @ConvertWith(
+            StringToIntArrayConverter::class
+        ) position: IntArray
+    ) {
+        verifyTextPossibleChanges(
+            text,
+            convertToDeletePossibleChanges(position, ",")
+        ) { CommaAsSentencesSeparatorValidator.validate(it) }
+    }
+
     // TODO: 09.01.2021 create replace to comma tests
-    // TODO: 09.01.2021 create delete comma tests
 }
