@@ -22,7 +22,11 @@ internal class TextPunctuationAnalyzerTest {
     @BeforeEach
     fun beforeAnyTest() {
         validators = mutableListOf()
-        textPunctuationAnalyzer = TextPunctuationAnalyzer(textDivider, DefaultClassifier(), listOf(), validators)
+        textPunctuationAnalyzer = TextPunctuationAnalyzer.Builder()
+            .textDivider(textDivider)
+            .classifier(DefaultClassifier())
+            .validators(validators)
+            .build()
     }
 
     @Test

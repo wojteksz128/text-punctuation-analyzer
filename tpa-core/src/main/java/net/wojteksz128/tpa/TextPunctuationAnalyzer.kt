@@ -7,7 +7,7 @@ import net.wojteksz128.tpa.text.TextValidatorPreparer
 import net.wojteksz128.tpa.text.split.Classifier
 import net.wojteksz128.tpa.text.split.TextDivider
 
-open class TextPunctuationAnalyzer(
+class TextPunctuationAnalyzer private constructor(
     private val textDivider: TextDivider,
     private val classifier: Classifier,
     val validatorPreparers: List<TextValidatorPreparer>,
@@ -39,4 +39,20 @@ open class TextPunctuationAnalyzer(
 
     private fun Map<TextValidator, List<PossibleChange>>.toPossibleChangesList() =
         this.flatMap { it.value }.sortedBy { it.position }.toList()
+
+    class Builder {
+        private lateinit var textDivider: TextDivider
+        private lateinit var classifier: Classifier
+        private var validatorPreparers = mutableListOf<TextValidatorPreparer>()
+        private var validators = mutableListOf<TextValidator>()
+
+        fun textDivider(textDivider: TextDivider) = apply { this.textDivider = textDivider }
+        fun classifier(classifier: Classifier) = apply { this.classifier = classifier }
+        fun validatorPreparers(validatorPreparers: List<TextValidatorPreparer>) = apply { this.validatorPreparers = validatorPreparers.toMutableList() }
+        fun validatorPreparer(validatorPreparer: TextValidatorPreparer) = apply { this.validatorPreparers.add(validatorPreparer) }
+        fun validators(validators: List<TextValidator>) = apply { this.validators = validators.toMutableList() }
+        fun validator(validator: TextValidator) = apply { this.validators.add(validator) }
+
+        fun build() = TextPunctuationAnalyzer(textDivider, classifier, validatorPreparers.toList(), validators.toList())
+    }
 }
