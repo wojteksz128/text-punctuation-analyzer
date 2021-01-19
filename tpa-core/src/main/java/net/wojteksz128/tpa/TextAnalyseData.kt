@@ -8,9 +8,17 @@ import net.wojteksz128.tpa.text.part.PunctuationMark
 import net.wojteksz128.tpa.text.part.TextPart
 import net.wojteksz128.tpa.text.part.Word
 
-data class TextAnalyseData(val text: String, val textParts: List<TextPart>, val languageAlphabet: LanguageAlphabet) {
-    val words = textParts.filterIsInstance<Word>().map { AwareOfSurroundings(it) }.sortedBy { it.startAt }
-    val punctuationMarks = textParts.filterIsInstance<PunctuationMark>().map { AwareOfSurroundings(it) }
+data class TextAnalyseData(
+    val text: String,
+    val textParts: List<TextPart>,
+    val languageAlphabet: LanguageAlphabet
+) {
+    val words = textParts.filterIsInstance<Word>()
+        .map { AwareOfSurroundings(it) }
+        .sortedBy { it.startAt }
+    val punctuationMarks = textParts.filterIsInstance<PunctuationMark>()
+        .map { AwareOfSurroundings(it) }
+        .sortedBy { it.startAt }
     val additionalParts = mutableMapOf<String, List<*>>()
     val possibleChanges = mutableMapOf<TextValidator, List<PossibleChange>>()
 
