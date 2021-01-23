@@ -14,7 +14,7 @@ import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 */
 
 fun main(args: Array<String>) {
-    val analyzer: TextPunctuationAnalyzer = TextPunctuationAnalyzer.Builder().polishTextPunctuationAnalyzer().build()
+    val analyzer: TextPunctuationAnalyzer = TextPunctuationAnalyzer.Builder(TextPunctuationAnalyzer.polishTextPunctuationAnalyzer()).build()
 
     args.forEach { text ->
         val recognizingText = printPreparingToClassifyText(text)

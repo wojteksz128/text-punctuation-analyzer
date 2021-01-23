@@ -9,9 +9,9 @@ import net.wojteksz128.tpa.polish.validator.dot.DotAtTheEndOfShortcutValidator
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 
-fun TextPunctuationAnalyzer.Builder.polishTextPunctuationAnalyzer() = apply {
-    this.textDivider(DefaultTextDividerImpl(LanguageAlphabetLoader.load()))
+fun TextPunctuationAnalyzer.Companion.polishTextPunctuationAnalyzer(): TextPunctuationAnalyzer =
+    TextPunctuationAnalyzer.Builder().textDivider(DefaultTextDividerImpl(LanguageAlphabetLoader.load()))
         .classifier(PolishWordsClassifier.instance)
         .validatorPreparers(listOf(SentenceGroupValidatorPreparer))
         .validators(listOf(DotAtSentenceEndValidator, DotAtTheEndOfShortcutValidator, CommaAsSentencesSeparatorValidator))
-}
+        .build()

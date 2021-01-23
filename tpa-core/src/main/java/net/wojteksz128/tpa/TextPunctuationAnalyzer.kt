@@ -40,11 +40,20 @@ class TextPunctuationAnalyzer private constructor(
     private fun Map<TextValidator, List<PossibleChange>>.toPossibleChangesList() =
         this.flatMap { it.value }.sortedBy { it.position }.toList()
 
-    class Builder {
+    class Builder(punctuationAnalyzer: TextPunctuationAnalyzer? = null) {
         private lateinit var textDivider: TextDivider
         private lateinit var classifier: Classifier
         private var validatorPreparers = mutableListOf<TextValidatorPreparer>()
         private var validators = mutableListOf<TextValidator>()
+
+        init {
+            punctuationAnalyzer?.let {
+                this.textDivider = it.textDivider
+                this.classifier = it.classifier
+                this.validatorPreparers = it.validatorPreparers.toMutableList()
+                this.validators = it.validators.toMutableList()
+            }
+        }
 
         fun textDivider(textDivider: TextDivider) = apply { this.textDivider = textDivider }
         fun classifier(classifier: Classifier) = apply { this.classifier = classifier }
@@ -55,4 +64,6 @@ class TextPunctuationAnalyzer private constructor(
 
         fun build() = TextPunctuationAnalyzer(textDivider, classifier, validatorPreparers.toList(), validators.toList())
     }
+
+    companion object
 }
