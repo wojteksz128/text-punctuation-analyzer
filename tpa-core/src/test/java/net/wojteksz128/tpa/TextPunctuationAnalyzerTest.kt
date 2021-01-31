@@ -17,23 +17,22 @@ internal class TextPunctuationAnalyzerTest {
 
     private val alphabet = LanguageAlphabetLoader.load(TextPunctuationAnalyzerTest::class.java.getResourceAsStream("/test_lang.json"))
     private val textDivider = DefaultTextDividerImpl(alphabet)
-    private lateinit var textPunctuationAnalyzer: TextPunctuationAnalyzer
+    private lateinit var textPunctuationAnalyzerBuilder: TextPunctuationAnalyzer.Builder
     private lateinit var validators: MutableList<TextValidator>
 
     @BeforeEach
     fun beforeAnyTest() {
         validators = mutableListOf()
-        textPunctuationAnalyzer = TextPunctuationAnalyzer.Builder()
+        textPunctuationAnalyzerBuilder = TextPunctuationAnalyzer.Builder()
             .textDivider(textDivider)
             .classifier(DefaultClassifier())
             .validators(validators)
-            .build()
     }
 
     @Test
     fun `Analyze of empty string returns clear result`() {
         val text = ""
-        val result = textPunctuationAnalyzer.analyze(text)
+        val result = textPunctuationAnalyzerBuilder.build().analyze(text)
         assertEquals(text, result.text)
         assertEquals(0, result.textParts.size)
         assertEquals(0, result.textParts.filterIsInstance<Word>().size)
@@ -44,7 +43,7 @@ internal class TextPunctuationAnalyzerTest {
     @Test
     fun `Analyze text with one word returns one word`() {
         val text = "Ala"
-        val result = textPunctuationAnalyzer.analyze(text)
+        val result = textPunctuationAnalyzerBuilder.build().analyze(text)
         assertEquals(text, result.text)
         assertEquals(1, result.textParts.size)
         assertEquals(1, result.textParts.filterIsInstance<Word>().size)
@@ -55,7 +54,7 @@ internal class TextPunctuationAnalyzerTest {
     fun `Analyze text with no possible changes returns empty possible changes list`() {
         val text = "Idę."
         validators.add(MockTextValidator(listOf()))
-        val result = textPunctuationAnalyzer.analyze(text)
+        val result = textPunctuationAnalyzerBuilder.validators(validators).build().analyze(text)
         assertEquals(text, result.text)
         assertEquals(2, result.textParts.size)
         assertEquals(1, result.textParts.filterIsInstance<Word>().size)
@@ -68,7 +67,7 @@ internal class TextPunctuationAnalyzerTest {
         val text = "Idę"
         val possibleChange = PossibleChange(ChangeType.INSERT, 3, new = ".")
         validators.add(MockTextValidator(listOf(possibleChange)))
-        val result = textPunctuationAnalyzer.analyze(text)
+        val result = textPunctuationAnalyzerBuilder.validators(validators).build().analyze(text)
         assertEquals(text, result.text)
         assertEquals(1, result.textParts.size)
         assertEquals(1, result.textParts.filterIsInstance<Word>().size)
