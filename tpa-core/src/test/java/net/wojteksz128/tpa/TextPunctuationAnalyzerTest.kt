@@ -8,6 +8,7 @@ import net.wojteksz128.tpa.text.part.PunctuationMark
 import net.wojteksz128.tpa.text.part.Word
 import net.wojteksz128.tpa.text.split.DefaultClassifier
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
+import net.wojteksz128.tpa.utils.MockTextValidator
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -53,10 +54,7 @@ internal class TextPunctuationAnalyzerTest {
     @Test
     fun `Analyze text with no possible changes returns empty possible changes list`() {
         val text = "Idę."
-        val validator = object : TextValidator {
-            override fun validate(analyseData: TextAnalyseData): List<PossibleChange> = listOf()
-        }
-        validators.add(validator)
+        validators.add(MockTextValidator(listOf()))
         val result = textPunctuationAnalyzer.analyze(text)
         assertEquals(text, result.text)
         assertEquals(2, result.textParts.size)
@@ -69,10 +67,7 @@ internal class TextPunctuationAnalyzerTest {
     fun `Analyze text with one possible change returns list of possible changes with one element`() {
         val text = "Idę"
         val possibleChange = PossibleChange(ChangeType.INSERT, 3, new = ".")
-        val validator = object : TextValidator {
-            override fun validate(analyseData: TextAnalyseData): List<PossibleChange> = listOf(possibleChange)
-        }
-        validators.add(validator)
+        validators.add(MockTextValidator(listOf(possibleChange)))
         val result = textPunctuationAnalyzer.analyze(text)
         assertEquals(text, result.text)
         assertEquals(1, result.textParts.size)

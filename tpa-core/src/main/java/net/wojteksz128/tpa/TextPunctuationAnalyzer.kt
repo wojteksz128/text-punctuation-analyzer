@@ -10,8 +10,8 @@ import net.wojteksz128.tpa.text.split.TextDivider
 class TextPunctuationAnalyzer private constructor(
     private val textDivider: TextDivider,
     private val classifier: Classifier,
-    val validatorPreparers: List<TextValidatorPreparer>,
-    val validators: List<TextValidator>
+    private val validatorPreparers: List<TextValidatorPreparer>,
+    private val validators: List<TextValidator>
 ) {
 
     fun analyze(text: String): TextAnalyseResult {
