@@ -9,44 +9,37 @@ import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 import net.wojteksz128.tpa.text.part.AwareOfSurroundings
 import net.wojteksz128.tpa.text.part.Word
+import net.wojteksz128.tpa.text.rule.Rule
+import net.wojteksz128.tpa.text.rule.RuleBreak
 
-object DotAtSentenceEndValidator : TextValidator {
+object DotAtSentenceEndValidator :
+    TextValidator(listOf(SimpleSentenceMayHaveDotAtTheEndRule, DotInsideSentenceNotPossibleRule))
 
-    override fun validate(analyseData: TextAnalyseData): List<PossibleChange> {
-        val possibleChanges = mutableListOf<PossibleChange>()
-
-        possibleChanges += findSentenceWithoutDotAtEnd(analyseData)
-        possibleChanges += findIncorrectPlacedDot(analyseData)
-
-        return possibleChanges
-    }
-
-    private fun findSentenceWithoutDotAtEnd(analyseData: TextAnalyseData): Iterable<PossibleChange> {
-        val possibleChanges = mutableListOf<PossibleChange>()
+object SimpleSentenceMayHaveDotAtTheEndRule : Rule {
+    override fun findBreaks(analyseData: TextAnalyseData): Iterable<RuleBreak> {
         val sentences = analyseData.additionalParts[SENTENCE_GROUP.name]?.map { it as Sentence } ?: listOf()
 
-        sentences.filter { !markAfter(".", it.lastWord) }
-            .map { it.lastWord }
-            .forEach { lastWord ->
-                val replaceNextWord = findRequiredNextWordReplace(lastWord)
-                possibleChanges += if (isAfterOtherPunctuationMark(
-                        lastWord,
-                        analyseData
-                    ) || replaceNextWord.containsChange
-                ) {
-                    val afterWord = lastWord.partsBetweenLaterWord
-                    PossibleChange(
-                        ChangeType.REPLACE,
-                        afterWord.first().startAt,
-                        "${afterWord.joinToString("")}${replaceNextWord.old}",
-                        ". ${replaceNextWord.new}"
-                    )
-                } else
-                    PossibleChange(ChangeType.INSERT, lastWord.endAt.inc(), new = ".")
-            }
-
-        return possibleChanges
+        return sentences.filter { !markAfter(".", it.lastWord) }
+            .map { RuleBreak(this, it.lastWord, analyseData) }
     }
+
+    override fun prepareSolution(ruleBreak: RuleBreak): PossibleChange {
+        @Suppress("UNCHECKED_CAST") val lastWord = ruleBreak.textPart as AwareOfSurroundings<Word>
+        val replaceNextWord = findRequiredNextWordReplace(lastWord)
+        return if (isAfterOtherPunctuationMark(lastWord, ruleBreak.analyseData) || replaceNextWord.containsChange) {
+            val afterWord = lastWord.partsBetweenLaterWord
+            PossibleChange(
+                ChangeType.REPLACE,
+                afterWord.first().startAt,
+                "${afterWord.joinToString("")}${replaceNextWord.old}",
+                ". ${replaceNextWord.new}"
+            )
+        } else
+            PossibleChange(ChangeType.INSERT, lastWord.endAt.inc(), new = ".")
+    }
+
+    private fun isAfterOtherPunctuationMark(lastWord: AwareOfSurroundings<Word>, analyseData: TextAnalyseData) =
+        lastWord.partsBetweenLaterWord.any { sign -> analyseData.languageAlphabet.separators.none { it == sign.text } }
 
     private fun findRequiredNextWordReplace(lastWord: AwareOfSurroundings<Word>): ReplaceStrings {
         return if (lastWord.wordAfter?.text?.first()?.isLowerCase() == true) ReplaceStrings(
@@ -54,11 +47,10 @@ object DotAtSentenceEndValidator : TextValidator {
             lastWord.wordAfter!!.text.first().toUpperCase().toString()
         ) else ReplaceStrings("", "")
     }
+}
 
-    private fun isAfterOtherPunctuationMark(lastWord: AwareOfSurroundings<Word>, analyseData: TextAnalyseData) =
-        lastWord.partsBetweenLaterWord.any { sign -> analyseData.languageAlphabet.separators.none { it == sign.text } }
-
-    private fun findIncorrectPlacedDot(analyseData: TextAnalyseData): Iterable<PossibleChange> {
+object DotInsideSentenceNotPossibleRule : Rule {
+    override fun findBreaks(analyseData: TextAnalyseData): Iterable<RuleBreak> {
         val sentencesObjects = analyseData.additionalParts[SENTENCE_GROUP.name] ?: listOf<Any>()
 
         return sentencesObjects.map { it as Sentence }
@@ -66,11 +58,15 @@ object DotAtSentenceEndValidator : TextValidator {
             .dropLast(1)
             .flatMap { it.partsBetweenLaterWord }
             .filter { it.text == "." }
-            .map { PossibleChange(ChangeType.DELETE, it.startAt, old = it.text) }
+            .map { RuleBreak(this, it, analyseData) }
     }
 
-    private data class ReplaceStrings(val old: String, val new: String) {
-        val containsChange: Boolean
-            get() = old.isNotEmpty() && new.isNotEmpty() && old != new
+    override fun prepareSolution(ruleBreak: RuleBreak): PossibleChange {
+        return PossibleChange(ChangeType.DELETE, ruleBreak.textPart.startAt, old = ruleBreak.textPart.text)
     }
+}
+
+private data class ReplaceStrings(val old: String, val new: String) {
+    val containsChange: Boolean
+        get() = old.isNotEmpty() && new.isNotEmpty() && old != new
 }

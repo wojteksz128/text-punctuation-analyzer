@@ -7,9 +7,9 @@ import net.wojteksz128.tpa.text.PossibleChange
 import net.wojteksz128.tpa.text.TextValidator
 import net.wojteksz128.tpa.utils.dag.grammar.PartOfSpeech
 
-object CommaAsSentencesSeparatorValidator : TextValidator {
-    // TODO: 10.12.2020 Zamień na wczytywanie jsona z konfiguracją
-    private val rules: Collection<Rule> = listOf(
+// TODO: 31.01.2021 change to tpa-core rule objects
+object CommaAsSentencesSeparatorValidator : TextValidator() {
+    private val commaRules: Collection<Rule> = listOf(
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("aby").exclude("tak aby")
             .phraseIsNot { it.first().base.isTypeOf(PartOfSpeech.PARTICLE) }
             .build(),// TODO: 09.01.2021 To może nie być do końca poprawne
@@ -90,6 +90,6 @@ object CommaAsSentencesSeparatorValidator : TextValidator {
 
     // TODO: 29.11.2020 Istnieją zasady stosowania poszczególnych słów kluczowych - trzeba to zaimplementować
     private fun findSubordinateSentencesByKeyWords(analyseData: TextAnalyseData): Iterable<PossibleChange> {
-        return rules.flatMap { rule -> rule.check(analyseData) }
+        return commaRules.flatMap { rule -> rule.check(analyseData) }
     }
 }
