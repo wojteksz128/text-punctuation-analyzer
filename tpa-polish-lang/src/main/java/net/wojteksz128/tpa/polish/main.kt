@@ -4,6 +4,9 @@ import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 /*
 * Examples:
@@ -13,14 +16,18 @@ import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 *   "Zażółć gęślą jaźń"
 */
 
+@ExperimentalTime
 fun main(args: Array<String>) {
     val analyzer: TextPunctuationAnalyzer = TextPunctuationAnalyzer.Builder(TextPunctuationAnalyzer.polishTextPunctuationAnalyzer()).build()
 
     args.forEach { text ->
         val recognizingText = printPreparingToClassifyText(text)
-        val result = analyzer.analyze(text)
+        val (result, executionTime) = measureTimedValue {
+            analyzer.analyze(text)
+        }
         printRecognizedParts(recognizingText, result)
         printPossibleChanges(result)
+        printRealizationTime(executionTime)
     }
 }
 
@@ -47,7 +54,7 @@ private fun printRecognizedParts(recognizingText: String, result: TextAnalyseRes
     }
 }
 
-fun printPossibleChanges(result: TextAnalyseResult) {
+private fun printPossibleChanges(result: TextAnalyseResult) {
     println("Sugerowane zmiany")
     result.possibleChanges.forEach {
         val message = when (it.changeType) {
@@ -66,4 +73,9 @@ private fun formatToPrint(interpretation: TextPartInterpretation): String {
     val categories = partSpecification.wordCategories.joinToString(prefix = ", ") { it.displayName }
 
     return "(${probability}) $grammarClass$categories"
+}
+
+@ExperimentalTime
+private fun printRealizationTime(executionTime: Duration) {
+    println("Realization time: ${executionTime.inMilliseconds} ms")
 }
