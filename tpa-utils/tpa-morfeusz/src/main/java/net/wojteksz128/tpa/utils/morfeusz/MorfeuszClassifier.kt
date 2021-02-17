@@ -21,15 +21,19 @@ open class MorfeuszClassifier : Classifier {
         val iterator = analyseData.textParts.iterator()
         var textPart: TextPart? = null
 
-        return interpretationList.groupBy { "${it.startNode}_${it.orth}" }.forEach { interpretation ->
-            while (textPart == null || !interpretation.key.contains(textPart!!.text))
-                textPart = iterator.next()
+        return interpretationList.groupBy { Triple<Int, Int, String>(it.startNode, it.endNode, it.orth) }
+            .forEach { (key, value) ->
+                while (textPart == null || !(textPart!!.text == key.third || textPart!!.text.startsWith(key.third) || textPart!!.text.endsWith(
+                        key.third
+                    ))
+                )
+                    textPart = iterator.next()
 
-            interpretation.value.mapNotNull { MorphInterpretationConverter.convert(it, morfeuszInstance) }.forEach {
-                textPart?.possibleCategories?.add(it)
+                value.mapNotNull { MorphInterpretationConverter.convert(it, morfeuszInstance) }.forEach {
+                    textPart?.possibleCategories?.add(it)
+                }
+//            textPart = if (iterator.hasNext()) iterator.next() else null
             }
-            textPart = if (iterator.hasNext()) iterator.next() else null
-        }
     }
 
     companion object {
