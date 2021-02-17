@@ -5,6 +5,7 @@ import net.wojteksz128.tpa.text.part.TextPart
 import net.wojteksz128.tpa.text.split.Classifier
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 import pl.sgjp.morfeusz.Morfeusz
+import pl.sgjp.morfeusz.MorphInterpretation
 
 open class MorfeuszClassifier : Classifier {
 
@@ -21,19 +22,23 @@ open class MorfeuszClassifier : Classifier {
         val iterator = analyseData.textParts.iterator()
         var textPart: TextPart? = null
 
-        return interpretationList.groupBy { Triple<Int, Int, String>(it.startNode, it.endNode, it.orth) }
+        val interpretationNodeGroup = this.prepareWordInterpretationNodeGroup(interpretationList)
+
+        interpretationNodeGroup.map { groupRange -> groupRange to interpretationList.filter { groupRange.contains(it.startNode) } }
+            .map { group -> Pair(group.first, group.second.maxBy { it.orth.length }) to group.second }
             .forEach { (key, value) ->
-                while (textPart == null || !(textPart!!.text == key.third || textPart!!.text.startsWith(key.third) || textPart!!.text.endsWith(
-                        key.third
-                    ))
-                )
+                while (textPart == null || textPart!!.text != key.second!!.orth)
                     textPart = iterator.next()
 
                 value.mapNotNull { MorphInterpretationConverter.convert(it, morfeuszInstance) }.forEach {
                     textPart?.possibleCategories?.add(it)
                 }
-//            textPart = if (iterator.hasNext()) iterator.next() else null
             }
+    }
+
+    private fun prepareWordInterpretationNodeGroup(interpretationList: MutableList<MorphInterpretation>): List<IntRange> {
+        val list = interpretationList.map { it.startNode until it.endNode }.distinct()
+        return list.filter { elem -> list.none { it != elem && elem.first >= it.first && elem.last <= it.last } }
     }
 
     companion object {
