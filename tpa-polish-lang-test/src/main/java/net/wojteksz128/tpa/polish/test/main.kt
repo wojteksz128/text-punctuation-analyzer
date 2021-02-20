@@ -1,9 +1,8 @@
 package net.wojteksz128.tpa.polish.test
 
-import net.wojteksz128.tpa.TextPunctuationAnalyzer
-import net.wojteksz128.tpa.polish.polishTextPunctuationAnalyzer
+import net.wojteksz128.tpa.polish.test.action.HelpAction
+import net.wojteksz128.tpa.polish.test.args.ArgsReader
 import kotlin.time.ExperimentalTime
-import kotlin.time.measureTimedValue
 
 /*
 * Examples:
@@ -15,18 +14,18 @@ import kotlin.time.measureTimedValue
 
 @ExperimentalTime
 fun main(args: Array<String>) {
-    val analyzer: TextPunctuationAnalyzer =
-        TextPunctuationAnalyzer.Builder(TextPunctuationAnalyzer.polishTextPunctuationAnalyzer()).build()
-    val resultPrinter = InConsoleResultPrinter()
-    val argsReader = ArgsReader()
-    val textsToAnalyse = argsReader.readArgs(args)
+    try {
+        val argsReader = ArgsReader()
+        val loadedArgs = argsReader.readArgs(args)
 
-    textsToAnalyse.forEach { text ->
-        resultPrinter.printPreparingToAnalyse(text)
-        val (result, executionTime) = measureTimedValue {
-            analyzer.analyze(text)
-        }
-        resultPrinter.printResult(result, executionTime)
+        loadedArgs.action.execute(loadedArgs)
+    } catch (e: IllegalStateException) {
+        System.err.println("${e.message}\n")
+        HelpAction().printHelp()
+    } catch (e: Exception) {
+        System.err.println("Wystąpił nieznany błąd: ${e.message}")
+        e.printStackTrace(System.err)
+        HelpAction().printHelp()
     }
 }
 

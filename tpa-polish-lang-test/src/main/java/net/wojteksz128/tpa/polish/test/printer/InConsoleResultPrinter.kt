@@ -1,4 +1,4 @@
-package net.wojteksz128.tpa.polish.test
+package net.wojteksz128.tpa.polish.test.printer
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.text.ChangeType
@@ -6,7 +6,7 @@ import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
-internal class InConsoleResultPrinter : ResultPrinter {
+class InConsoleResultPrinter : ResultPrinter {
     private val recognizingText = "Trwa rozpoznawanie..."
 
     override fun printPreparingToAnalyse(text: String) {

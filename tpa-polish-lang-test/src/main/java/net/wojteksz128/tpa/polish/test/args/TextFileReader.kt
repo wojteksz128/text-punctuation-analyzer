@@ -1,17 +1,18 @@
-package net.wojteksz128.tpa.polish.test
+package net.wojteksz128.tpa.polish.test.args
 
 import java.io.File
 
-internal class TextFileReader {
+class TextFileReader {
     private var filePathExpected = false
 
-    fun filePathProcess(arg: String, textsToAnalyse: MutableList<String>): Boolean {
+    fun checkIsFilePath(arg: String, textsToAnalyse: MutableList<String>): Boolean {
         return when {
             filePathExpected -> {
+                if (arg.startsWith("-")) throw IllegalStateException("Nazwą pliku nie może zaczynać się od znaku '-' (wprowadzono '$arg')")
                 assignFileContentToList(arg, textsToAnalyse)
                 true
             }
-            listOf("--file", "-f", "-file").contains(arg) -> true.also { filePathExpected = it }
+            listOf("--file", "-f").contains(arg) -> true.also { filePathExpected = it }
             else -> false
         }
     }
