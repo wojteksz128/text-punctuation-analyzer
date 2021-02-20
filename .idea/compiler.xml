@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="tpa-concraft" />
+        <module name="tpa-polish-lang-test" />
         <module name="tpa-morfeusz" />
         <module name="tpa-dag" />
         <module name="tpa-core" />

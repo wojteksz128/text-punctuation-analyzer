@@ -13,6 +13,7 @@
         <module>tpa-core</module>
         <module>tpa-polish-lang</module>
         <module>tpa-utils</module>
+        <module>tpa-polish-lang-test</module>
     </modules>
 
     <properties>

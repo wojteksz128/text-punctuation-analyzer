@@ -1,7 +1,8 @@
-package net.wojteksz128.tpa.polish
+package net.wojteksz128.tpa.polish.test
 
 import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
+import net.wojteksz128.tpa.polish.polishTextPunctuationAnalyzer
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 import java.io.File
