@@ -47,7 +47,7 @@ class ArgsReader {
         )
     }
 
-    fun switchAction(newAction: Action) {
+    private fun switchAction(newAction: Action) {
         if (action == null) {
             action = newAction
         } else {

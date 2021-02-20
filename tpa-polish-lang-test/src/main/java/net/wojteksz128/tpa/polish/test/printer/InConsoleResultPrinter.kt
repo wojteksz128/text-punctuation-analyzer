@@ -1,31 +1,32 @@
 package net.wojteksz128.tpa.polish.test.printer
 
 import net.wojteksz128.tpa.TextAnalyseResult
+import net.wojteksz128.tpa.polish.test.args.LoadedArgs
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.utils.dag.TextPartInterpretation
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 class InConsoleResultPrinter : ResultPrinter {
-    private val recognizingText = "Trwa rozpoznawanie..."
+    private val progressText = "Trwa analiza..."
 
     override fun printPreparingToAnalyse(text: String) {
         println("----------")
         println()
         println("Wczytany tekst: $text")
         println()
-        print(recognizingText)
+        print(progressText)
     }
 
     @ExperimentalTime
-    override fun printResult(result: TextAnalyseResult, executionTime: Duration) {
+    override fun printResult(result: TextAnalyseResult, executionTime: Duration, loadedArgs: LoadedArgs) {
         printRecognizedParts(result)
         printPossibleChanges(result)
         printRealizationTime(executionTime)
     }
 
     private fun printRecognizedParts(result: TextAnalyseResult) {
-        1.rangeTo(recognizingText.length).forEach { _ -> print("\b \b") }
+        1.rangeTo(progressText.length).forEach { _ -> print("\b \b") }
         println("\rRozpoznano:")
         result.textParts.forEach { textPart ->
             println(
