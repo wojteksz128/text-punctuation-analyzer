@@ -13,7 +13,7 @@
     <name>Text Punctuation Analyzer &gt; Utils &gt; Morfeusz</name>
 
     <properties>
-        <morfeusz.path>/usr/share/java/jmorfeusz.jar</morfeusz.path>
+        <morfeusz.path>C:\Users\szcze\Desktop\jmorfeusz\jmorfeusz.jar</morfeusz.path>
     </properties>
 
     <dependencies>
