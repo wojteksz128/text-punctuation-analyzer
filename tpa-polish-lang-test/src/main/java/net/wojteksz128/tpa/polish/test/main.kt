@@ -23,9 +23,8 @@ fun main(args: Array<String>) {
         System.err.println("${e.message}\n")
         HelpAction().printHelp()
     } catch (e: Exception) {
-        System.err.println("Wystąpił nieznany błąd: ${e.message}")
+        System.err.println("Wystąpił nieznany błąd")
         e.printStackTrace(System.err)
-        HelpAction().printHelp()
     }
 }
 
