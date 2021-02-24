@@ -52,6 +52,7 @@ object CommaAsSentencesSeparatorValidator : TextValidator() {
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("kto").build(),
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("którędy").build(),
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("który").build(),
+        Rule.Builder().forPunctuationMark(",").markBeforePhrase("którego").build(),
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("mimo iż").build(),
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("mimo że").build(),
         Rule.Builder().forPunctuationMark(",").markBeforePhrase("na co").build(),

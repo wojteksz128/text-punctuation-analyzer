@@ -3,7 +3,9 @@ package net.wojteksz128.tpa.polish
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
 import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.polish.split.PolishWordsClassifier
+import net.wojteksz128.tpa.polish.validator.comma.CommaAsSentenceSeparatorValidator
 import net.wojteksz128.tpa.polish.validator.comma.CommaAsSentencesSeparatorValidator
+import net.wojteksz128.tpa.polish.validator.comma.CommaBetweenTheSameWordClass
 import net.wojteksz128.tpa.polish.validator.dot.DotAtSentenceEndValidator
 import net.wojteksz128.tpa.polish.validator.dot.DotAtTheEndOfShortcutValidator
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
@@ -13,5 +15,13 @@ fun TextPunctuationAnalyzer.Companion.polishTextPunctuationAnalyzer(): TextPunct
     TextPunctuationAnalyzer.Builder().textDivider(DefaultTextDividerImpl(LanguageAlphabetLoader.load()))
         .classifier(PolishWordsClassifier.instance)
         .validatorPreparers(listOf(SentenceGroupValidatorPreparer))
-        .validators(listOf(DotAtSentenceEndValidator, DotAtTheEndOfShortcutValidator, CommaAsSentencesSeparatorValidator))
+        .validators(
+            listOf(
+                DotAtSentenceEndValidator,
+                DotAtTheEndOfShortcutValidator,
+                CommaAsSentencesSeparatorValidator,
+                CommaAsSentenceSeparatorValidator,
+                CommaBetweenTheSameWordClass
+            )
+        )
         .build()
