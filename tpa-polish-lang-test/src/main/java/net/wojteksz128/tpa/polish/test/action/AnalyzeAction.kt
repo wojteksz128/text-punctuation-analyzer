@@ -3,6 +3,11 @@ package net.wojteksz128.tpa.polish.test.action
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
 import net.wojteksz128.tpa.polish.polishTextPunctuationAnalyzer
 import net.wojteksz128.tpa.polish.test.args.LoadedArgs
+import net.wojteksz128.tpa.polish.test.model.*
+import net.wojteksz128.tpa.text.part.TextPart
+import net.wojteksz128.tpa.utils.dag.TextPartSpecification
+import java.math.BigInteger
+import java.security.MessageDigest
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -12,12 +17,40 @@ class AnalyzeAction : Action {
 
     @ExperimentalTime
     override fun execute(loadedArgs: LoadedArgs) {
+        val analyzeExecutionResult = AnalyseExecutionResult()
+
         loadedArgs.texts.forEach { text ->
             loadedArgs.resultPrinter.printPreparingToAnalyse(text)
             val (result, executionTime) = measureTimedValue {
                 analyzer.analyze(text)
             }
-            loadedArgs.resultPrinter.printResult(result, executionTime, loadedArgs)
+            val textAnalyzeResult = TextAnalyzeResultDto(
+                generateTextId(text),
+                result.possibleChanges,
+                result.textParts.map { it.toDto() },
+                executionTime
+            )
+            analyzeExecutionResult.results += textAnalyzeResult
+
+            loadedArgs.resultPrinter.printOneTextAnalyseResult(textAnalyzeResult, loadedArgs)
+
         }
+        loadedArgs.resultPrinter.printAfterAllAnalysis(analyzeExecutionResult, loadedArgs)
+    }
+
+    private fun generateTextId(text: String): String {
+        val md = MessageDigest.getInstance("MD5")
+        return BigInteger(1, md.digest(text.toByteArray())).toString(16).padStart(32, '0')
+    }
+
+    private fun TextPart.toDto(): TextPartDto {
+        val possibleCategoriesDto = this.possibleCategories.map { it.textPartSpecification.toDto() }
+        return TextPartDto(this.text, this.startAt, this.endAt, possibleCategoriesDto)
+    }
+
+    private fun TextPartSpecification.toDto(): TextPartSpecificationDto {
+        val grammarClassDto = GrammarClassDto(this.grammarClass.shortcut, this.grammarClass.name)
+        val categories = this.wordCategories.map { GrammarCategoryDto(it.shortcut, it.displayName, it.property.name) }
+        return TextPartSpecificationDto(this.tag, grammarClassDto, categories, this.probability)
     }
 }

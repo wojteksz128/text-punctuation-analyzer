@@ -1,18 +1,14 @@
 package net.wojteksz128.tpa.polish.test.printer
 
 import com.beust.klaxon.Klaxon
-import net.wojteksz128.tpa.TextAnalyseResult
 import net.wojteksz128.tpa.polish.test.args.LoadedArgs
-import net.wojteksz128.tpa.polish.test.model.*
-import net.wojteksz128.tpa.text.part.TextPart
-import net.wojteksz128.tpa.utils.dag.TextPartSpecification
+import net.wojteksz128.tpa.polish.test.model.AnalyseExecutionResult
+import net.wojteksz128.tpa.polish.test.model.TextAnalyzeResultDto
 import java.io.File
-import java.math.BigInteger
-import java.security.MessageDigest
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 class JsonResultPrinter : ResultPrinter {
+    private val durationConverter = TextAnalyzeResultDto.DurationConverter()
     private val progressText = "Trwa analiza..."
 
     override fun printPreparingToAnalyse(text: String) {
@@ -24,43 +20,23 @@ class JsonResultPrinter : ResultPrinter {
     }
 
     @ExperimentalTime
-    override fun printResult(result: TextAnalyseResult, executionTime: Duration, loadedArgs: LoadedArgs) {
+    override fun printOneTextAnalyseResult(result: TextAnalyzeResultDto, loadedArgs: LoadedArgs) {
         1.rangeTo(progressText.length).forEach { _ -> print("\b \b") }
-        val textSolution = prepareSolution(result)
-        save(textSolution, loadedArgs.outputName ?: "result.json")
-        printRealizationTime(executionTime)
+        println("Czas realizacji: ${result.executionTime.inMilliseconds} ms")
 
-    }
-
-    private fun prepareSolution(result: TextAnalyseResult): TextSolution {
-        val textPartsDto = result.textParts.map { it.toDto() }
-        return TextSolution(generateTextId(result.text), textPartsDto, result.possibleChanges)
-    }
-
-    private fun save(textSolution: TextSolution, filePath: String) {
-        val toJsonString = Klaxon().toJsonString(textSolution)
-        File(filePath).writeText(toJsonString)
-    }
-
-    private fun generateTextId(text: String): String {
-        val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest(text.toByteArray())).toString(16).padStart(32, '0')
     }
 
     @ExperimentalTime
-    private fun printRealizationTime(executionTime: Duration) {
-        println("Realization time: ${executionTime.inMilliseconds} ms")
+    override fun printAfterAllAnalysis(analyzeExecutionResult: AnalyseExecutionResult, loadedArgs: LoadedArgs) {
+        println("Łączny czas realizacji: ${analyzeExecutionResult.totalExecutionTime.inMilliseconds} ms")
+        val filePath = loadedArgs.outputName ?: "result.json"
+        save(analyzeExecutionResult, filePath)
+        println("Rezultat analiz wszystkich tekstów został zapisany do pliku '$filePath'.")
     }
 
-    private fun TextPart.toDto(): TextPartDto {
-        val possibleCategoriesDto = this.possibleCategories.map { it.textPartSpecification.toDto() }
-        return TextPartDto(this.text, this.startAt, this.endAt, possibleCategoriesDto)
+    private fun save(textSolution: AnalyseExecutionResult, filePath: String) {
+        val toJsonString = Klaxon().fieldConverter(TextAnalyzeResultDto.KlaxonDuration::class, durationConverter)
+            .toJsonString(textSolution)
+        File(filePath).writeText(toJsonString)
     }
-
-    private fun TextPartSpecification.toDto(): TextPartSpecificationDto {
-        val grammarClassDto = GrammarClassDto(this.grammarClass.shortcut, this.grammarClass.name)
-        val categories = this.wordCategories.map { GrammarCategoryDto(it.shortcut, it.displayName, it.property.name) }
-        return TextPartSpecificationDto(this.tag, grammarClassDto, categories, this.probability)
-    }
-
 }
