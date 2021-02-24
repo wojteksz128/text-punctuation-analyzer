@@ -20,53 +20,56 @@ class PrepareAction : Action {
     }
 
     private fun splitTextIntoTextWithErrorsAndErrorsSolutions(text: String): Pair<String, TextSolution> {
-        val syntheticErrorsSolution = pattern.findAll(text).mapNotNull {
-            when {
-                it.value.startsWith(".") -> prepareDotErrorFor(it)
-                it.value.startsWith(",") -> prepareCommaErrorFor(it)
-                it.value.startsWith(";") -> prepareSemicolonErrorFor(it)
-                else -> null
+        var removedFromEarlier = 0
+        val removeMarkers = pattern.findAll(text).sortedBy { it.range.first }.mapNotNull {
+            val (removeMarker, removedChar) = when {
+                it.value.startsWith(".") -> prepareDotErrorFor(it, removedFromEarlier)
+                it.value.startsWith(",") -> prepareCommaErrorFor(it, removedFromEarlier)
+                it.value.startsWith(";") -> prepareSemicolonErrorFor(it, removedFromEarlier)
+                else -> Pair<RemoveMarker?, Int>(null, 0)
             }
-        }
-        val brokenText = applyReverseErrors(text, syntheticErrorsSolution)
+            removedFromEarlier += removedChar
+            removeMarker
+        }.toList()
+        val brokenText = applyReverseErrors(text, removeMarkers)
         return Pair(
             brokenText,
-            TextSolution(generateTextId(brokenText), listOf(), syntheticErrorsSolution.toList())
+            TextSolution(generateTextId(brokenText), listOf(), removeMarkers.map { it.changeAfterRemove }.toList())
         )
     }
 
-    private fun prepareDotErrorFor(matchResult: MatchResult): PossibleChange {
+    private fun prepareDotErrorFor(matchResult: MatchResult, removedFromEarlier: Int): Pair<RemoveMarker?, Int> {
         // TODO: 21.02.2021 Może być bardziej rozbudowane i testować więcej koniecznych zmian
         val position = matchResult.range.first
         val changeSentenceFirstChar = Random.nextBoolean()
         return if (changeSentenceFirstChar && matchResult.range.last - matchResult.range.first > 0) {
             val old = matchResult.value.removeRange(0..0).toLowerCase()
             val new = matchResult.value
-            PossibleChange(ChangeType.REPLACE, position, old, new)
+            Pair(RemoveMarker(PossibleChange(ChangeType.REPLACE, position, old, new), removedFromEarlier), 1)
         } else {
             val new = matchResult.value.first().toString()
-            PossibleChange(ChangeType.INSERT, position, new = new)
+            Pair(RemoveMarker(PossibleChange(ChangeType.INSERT, position, new = new), removedFromEarlier), 1)
         }
     }
 
-    private fun prepareCommaErrorFor(matchResult: MatchResult): PossibleChange {
+    private fun prepareCommaErrorFor(matchResult: MatchResult, removedFromEarlier: Int): Pair<RemoveMarker?, Int> {
         // TODO: 21.02.2021 Może być bardziej rozbudowane i testować więcej koniecznych zmian
         val position = matchResult.range.first
         val new = matchResult.value
-        return PossibleChange(ChangeType.INSERT, position, new = new)
+        return Pair(RemoveMarker(PossibleChange(ChangeType.INSERT, position, new = new), removedFromEarlier), 1)
     }
 
-    private fun prepareSemicolonErrorFor(matchResult: MatchResult): PossibleChange {
+    private fun prepareSemicolonErrorFor(matchResult: MatchResult, removedFromEarlier: Int): Pair<RemoveMarker?, Int> {
         // TODO: 21.02.2021 Może być bardziej rozbudowane i testować więcej koniecznych zmian
         val position = matchResult.range.first
         val new = matchResult.value
-        return PossibleChange(ChangeType.INSERT, position, new = new)
+        return Pair(RemoveMarker(PossibleChange(ChangeType.INSERT, position, new = new), removedFromEarlier), 1)
     }
 
-    private fun applyReverseErrors(text: String, syntheticErrorsSolution: Sequence<PossibleChange>): String {
+    private fun applyReverseErrors(text: String, removeMarkers: List<RemoveMarker>): String {
         val brokenText = StringBuilder(text)
 
-        syntheticErrorsSolution.sortedByDescending { it.position }.forEach {
+        removeMarkers.sortedByDescending { it.position }.forEach {
             when (it.changeType) {
                 ChangeType.INSERT -> brokenText.delete(it.position, it.position + it.new!!.length)
                 ChangeType.REPLACE -> {
@@ -99,4 +102,21 @@ class PrepareAction : Action {
         File(filePath).writeText(jsonArrayString)
         println("Rozwiązania zostały zapisane w pliku $filePath.")
     }
+}
+
+data class RemoveMarker(val changeFromOriginal: PossibleChange, val removedEarlier: Int) {
+    val changeAfterRemove: PossibleChange
+        get() = PossibleChange(changeType, position - removedEarlier, old, new)
+
+    val changeType: ChangeType
+        get() = changeFromOriginal.changeType
+
+    val position: Int
+        get() = changeFromOriginal.position
+
+    val old: String?
+        get() = changeFromOriginal.old
+
+    val new: String?
+        get() = changeFromOriginal.new
 }
