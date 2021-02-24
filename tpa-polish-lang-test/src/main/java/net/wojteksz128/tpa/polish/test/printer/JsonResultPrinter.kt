@@ -8,7 +8,6 @@ import java.io.File
 import kotlin.time.ExperimentalTime
 
 class JsonResultPrinter : ResultPrinter {
-    private val durationConverter = TextAnalyzeResultDto.DurationConverter()
     private val progressText = "Trwa analiza..."
 
     override fun printPreparingToAnalyse(text: String) {
@@ -22,21 +21,20 @@ class JsonResultPrinter : ResultPrinter {
     @ExperimentalTime
     override fun printOneTextAnalyseResult(result: TextAnalyzeResultDto, loadedArgs: LoadedArgs) {
         1.rangeTo(progressText.length).forEach { _ -> print("\b \b") }
-        println("Czas realizacji: ${result.executionTime.inMilliseconds} ms")
+        println("Czas realizacji: ${result.executionTimeMillis} ms")
 
     }
 
     @ExperimentalTime
     override fun printAfterAllAnalysis(analyzeExecutionResult: AnalyseExecutionResult, loadedArgs: LoadedArgs) {
-        println("Łączny czas realizacji: ${analyzeExecutionResult.totalExecutionTime.inMilliseconds} ms")
+        println("Łączny czas realizacji: ${analyzeExecutionResult.totalExecutionTimeMillis} ms")
         val filePath = loadedArgs.outputName ?: "result.json"
         save(analyzeExecutionResult, filePath)
         println("Rezultat analiz wszystkich tekstów został zapisany do pliku '$filePath'.")
     }
 
     private fun save(textSolution: AnalyseExecutionResult, filePath: String) {
-        val toJsonString = Klaxon().fieldConverter(TextAnalyzeResultDto.KlaxonDuration::class, durationConverter)
-            .toJsonString(textSolution)
+        val toJsonString = Klaxon().toJsonString(textSolution)
         File(filePath).writeText(toJsonString)
     }
 }

@@ -24,7 +24,7 @@ class InConsoleResultPrinter : ResultPrinter {
     override fun printOneTextAnalyseResult(result: TextAnalyzeResultDto, loadedArgs: LoadedArgs) {
         printRecognizedParts(result.textParts)
         printPossibleChanges(result.solution)
-        println("Czas realizacji: ${result.executionTime.inMilliseconds} ms")
+        println("Czas realizacji: ${result.executionTimeMillis} ms")
     }
 
     private fun printRecognizedParts(textParts: List<TextPartDto>) {
@@ -62,6 +62,6 @@ class InConsoleResultPrinter : ResultPrinter {
 
     @ExperimentalTime
     override fun printAfterAllAnalysis(analyzeExecutionResult: AnalyseExecutionResult, loadedArgs: LoadedArgs) {
-        println("Łączny czas realizacji: ${analyzeExecutionResult.totalExecutionTime.inMilliseconds} ms")
+        println("Łączny czas realizacji: ${analyzeExecutionResult.totalExecutionTimeMillis} ms")
     }
 }

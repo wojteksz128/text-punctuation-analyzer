@@ -9,6 +9,7 @@ class ValueArgumentReader {
             isValueExpected -> {
                 if (arg.startsWith("-")) throw IllegalStateException("Nazwą pliku nie może zaczynać się od znaku '-' (wprowadzono '$arg')")
                 value = arg
+                isValueExpected = false
                 true
             }
             expectedPattern.contains(arg) -> true.also { isValueExpected = it }

@@ -28,7 +28,7 @@ class AnalyzeAction : Action {
                 generateTextId(text),
                 result.possibleChanges,
                 result.textParts.map { it.toDto() },
-                executionTime
+                executionTime.toLongMilliseconds()
             )
             analyzeExecutionResult.results += textAnalyzeResult
 
