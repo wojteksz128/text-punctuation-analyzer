@@ -5,6 +5,5 @@ import net.wojteksz128.tpa.text.PossibleChange
 
 data class TextSolution(
     @Json(index = 1) val textId: String,
-    @Json(index = 3) val textParts: List<TextPartDto>,
     @Json(index = 2) val solution: List<PossibleChange>
 )

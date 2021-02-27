@@ -2,12 +2,11 @@ package net.wojteksz128.tpa.polish.test.action
 
 import net.wojteksz128.tpa.TextPunctuationAnalyzer
 import net.wojteksz128.tpa.polish.polishTextPunctuationAnalyzer
+import net.wojteksz128.tpa.polish.test.AnalyzeUtils.generateTextId
 import net.wojteksz128.tpa.polish.test.args.LoadedArgs
 import net.wojteksz128.tpa.polish.test.model.*
 import net.wojteksz128.tpa.text.part.TextPart
 import net.wojteksz128.tpa.utils.dag.TextPartSpecification
-import java.math.BigInteger
-import java.security.MessageDigest
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -36,11 +35,6 @@ class AnalyzeAction : Action {
 
         }
         loadedArgs.resultPrinter.printAfterAllAnalysis(analyzeExecutionResult, loadedArgs)
-    }
-
-    private fun generateTextId(text: String): String {
-        val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest(text.toByteArray())).toString(16).padStart(32, '0')
     }
 
     private fun TextPart.toDto(): TextPartDto {

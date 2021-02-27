@@ -1,6 +1,10 @@
 package net.wojteksz128.tpa.polish.test.action
 
 import com.beust.klaxon.Klaxon
+import net.wojteksz128.tpa.polish.test.action.measureStats.ActualTextSolutionNotExistsException
+import net.wojteksz128.tpa.polish.test.action.measureStats.AnalyseCorrectnessStats
+import net.wojteksz128.tpa.polish.test.action.measureStats.ConnectedExpectedWithActual
+import net.wojteksz128.tpa.polish.test.action.measureStats.ExpectedTextSolutionNotExistsException
 import net.wojteksz128.tpa.polish.test.args.LoadedArgs
 import net.wojteksz128.tpa.polish.test.model.AnalyseExecutionResult
 import net.wojteksz128.tpa.polish.test.model.TextAnalyzeResultDto
@@ -88,32 +92,3 @@ class MeasureStatsAction : Action {
     }
 }
 
-data class AnalyseCorrectnessStats(
-    val correctChangeSize: Int,
-    val requiredChangesSize: Int,
-    val wrongChangeSize: Int,
-    val wrongSignInCorrectPlaceSize: Int
-) {
-    val correctnessPercent: Double
-        get() = correctChangeSize.toDouble() / requiredChangesSize
-
-    operator fun plus(other: AnalyseCorrectnessStats): AnalyseCorrectnessStats {
-        val correctChangeSize = this.correctChangeSize + other.correctChangeSize
-        val requiredChangesSize = this.requiredChangesSize + other.requiredChangesSize
-        val wrongChangeSize = this.wrongChangeSize + other.wrongChangeSize
-        val wrongSignInCorrectPlaceSize = this.wrongSignInCorrectPlaceSize + other.wrongSignInCorrectPlaceSize
-
-        return AnalyseCorrectnessStats(
-            correctChangeSize,
-            requiredChangesSize,
-            wrongChangeSize,
-            wrongSignInCorrectPlaceSize
-        )
-    }
-}
-
-class ExpectedTextSolutionNotExistsException : Exception()
-
-class ActualTextSolutionNotExistsException : Exception()
-
-data class ConnectedExpectedWithActual<E, A>(val expected: E, var actual: A? = null)

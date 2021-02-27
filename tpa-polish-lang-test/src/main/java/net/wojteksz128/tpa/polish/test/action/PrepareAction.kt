@@ -1,13 +1,13 @@
 package net.wojteksz128.tpa.polish.test.action
 
 import com.beust.klaxon.Klaxon
+import net.wojteksz128.tpa.polish.test.AnalyzeUtils.generateTextId
+import net.wojteksz128.tpa.polish.test.action.prepare.RemoveMarker
 import net.wojteksz128.tpa.polish.test.args.LoadedArgs
 import net.wojteksz128.tpa.polish.test.model.TextSolution
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 import java.io.File
-import java.math.BigInteger
-import java.security.MessageDigest
 import kotlin.random.Random
 
 class PrepareAction : Action {
@@ -34,7 +34,7 @@ class PrepareAction : Action {
         val brokenText = applyReverseErrors(text, removeMarkers)
         return Pair(
             brokenText,
-            TextSolution(generateTextId(brokenText), listOf(), removeMarkers.map { it.changeAfterRemove }.toList())
+            TextSolution(generateTextId(brokenText), removeMarkers.map { it.changeAfterRemove }.toList())
         )
     }
 
@@ -84,11 +84,6 @@ class PrepareAction : Action {
         return brokenText.toString()
     }
 
-    private fun generateTextId(text: String): String {
-        val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest(text.toByteArray())).toString(16).padStart(32, '0')
-    }
-
     private fun storeTextsIntoTxtFile(textForTestWithSolution: Map<String, TextSolution>, loadedArgs: LoadedArgs) {
         val joinedTexts = textForTestWithSolution.keys.joinToString("\n")
         val filePath = "${loadedArgs.outputName ?: "output"}.txt"
@@ -104,19 +99,3 @@ class PrepareAction : Action {
     }
 }
 
-data class RemoveMarker(val changeFromOriginal: PossibleChange, val removedEarlier: Int) {
-    val changeAfterRemove: PossibleChange
-        get() = PossibleChange(changeType, position - removedEarlier, old, new)
-
-    val changeType: ChangeType
-        get() = changeFromOriginal.changeType
-
-    val position: Int
-        get() = changeFromOriginal.position
-
-    val old: String?
-        get() = changeFromOriginal.old
-
-    val new: String?
-        get() = changeFromOriginal.new
-}
