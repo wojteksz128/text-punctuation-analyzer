@@ -16,7 +16,7 @@ class StatsCalculator {
         val analyseStatsForTexts = expectedWithActualTextSolutions.values.map(this::calculateStatsForText)
 
         return if (analyseStatsForTexts.isNotEmpty()) analyseStatsForTexts.reduce { a, b -> a + b }
-        else AnalyseCorrectnessStats(0, 0, 0, 0)
+        else AnalyseCorrectnessStats(0, 0, 0, 0, mapOf(), mapOf())
     }
 
     private fun connectExpectedWithActualTextSolutions(

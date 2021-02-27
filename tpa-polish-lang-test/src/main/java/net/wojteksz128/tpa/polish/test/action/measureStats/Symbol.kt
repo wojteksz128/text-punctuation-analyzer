@@ -1,5 +1,5 @@
 package net.wojteksz128.tpa.polish.test.action.measureStats
 
-enum class Symbol {
-    COMMA, DOT, SEMICOLON, NONE, ERROR
+enum class Symbol(val char: Char) {
+    COMMA(','), DOT('.'), SEMICOLON(';'), NONE(' ')
 }

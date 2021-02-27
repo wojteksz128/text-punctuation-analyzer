@@ -3,6 +3,7 @@ package net.wojteksz128.tpa.polish.test.action
 import com.beust.klaxon.Klaxon
 import net.wojteksz128.tpa.polish.test.action.measureStats.AnalyseCorrectnessStats
 import net.wojteksz128.tpa.polish.test.action.measureStats.StatsCalculator
+import net.wojteksz128.tpa.polish.test.action.measureStats.Symbol
 import net.wojteksz128.tpa.polish.test.args.LoadedArgs
 import net.wojteksz128.tpa.polish.test.model.AnalyseExecutionResult
 import net.wojteksz128.tpa.polish.test.model.TextSolution
@@ -44,14 +45,47 @@ class MeasureStatsAction : Action {
         analyzeResult: AnalyseExecutionResult,
         analyseStats: AnalyseCorrectnessStats
     ) {
-        println("=== Statystyka łączna ===")
-        println()
-        println("Czas realizacji analizy całego tekstu:                       \t${analyzeResult.totalExecutionTimeMillis} ms")
-        println("Ilość poprawnych propozycji zmian:                           \t${analyseStats.correctChangeSize}")
-        println("Ilość oryginalnych zmian:                                    \t${analyseStats.requiredChangesSize}")
-        println("Procent zgodności propozycji zmian poprawnych z oryginalnymi:\t${analyseStats.correctnessPercent * 100}%")
-        println("Ilość błędnych pozycji zmian:                                \t${analyseStats.wrongChangeSize}")
-        println("Ilość błędnych znaków na poprawnej pozycji                   \t${analyseStats.wrongSignInCorrectPlaceSize}")
+        println("""
+=== Statystyka łączna ===
+
+Czas realizacji analizy całego tekstu:                       $TAB${analyzeResult.totalExecutionTimeMillis} ms
+Ilość poprawnych propozycji zmian:                           $TAB${analyseStats.correctChangeSize}
+Ilość oryginalnych zmian:                                    $TAB${analyseStats.requiredChangesSize}
+Procent zgodności propozycji zmian poprawnych z oryginalnymi:$TAB${analyseStats.correctnessPercent * 100}%
+Ilość błędnych pozycji zmian:                                $TAB${analyseStats.wrongChangeSize}
+Ilość błędnych znaków na poprawnej pozycji                   $TAB${analyseStats.wrongSignInCorrectPlaceSize}
+
+Liczba oryginalnych zmian dla poszczególnych symboli:
+${Symbol.values().joinToString("\n") { "\tZnak '${it.char}': ${analyseStats.requiredChangesNoMap[it] ?: 0}" }}
+
+Tabela skuteczności klasyfikatora
+
+                | ${Symbol.values().joinToString(" | ", postfix = " ") { "Znaleziono '${it.char}'" }}
+----------------|${(1..Symbol.values().size).joinToString("|") { "----------------" }}
+${
+            Symbol.values().joinToString("\n") { requiredChar ->
+                " Oczekiwano '${requiredChar.char}' | ${
+                    Symbol.values().joinToString(" | ") {
+                        "%14d".format(
+                            analyseStats.actualChangesNoInExpectedCharsMap[requiredChar]?.get(it) ?: 0
+                        )
+                    }
+                }"
+            }
+        }
+
+
+
+
+
+
+
+
+""")
+    }
+
+    companion object {
+        private const val TAB = "\t"
     }
 }
 
