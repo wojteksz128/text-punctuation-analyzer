@@ -12,6 +12,7 @@ import kotlin.time.ExperimentalTime
 *   "Zażółć gęślą jaźń"
 */
 
+@ExperimentalStdlibApi
 @ExperimentalTime
 fun main(args: Array<String>) {
     try {

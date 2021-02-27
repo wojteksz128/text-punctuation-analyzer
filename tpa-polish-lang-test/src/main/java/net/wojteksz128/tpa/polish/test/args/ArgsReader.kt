@@ -17,6 +17,7 @@ class ArgsReader {
     private var prepareSolutionFile: String? = null
     private var resultPrinter: ResultPrinter? = null
 
+    @ExperimentalStdlibApi
     fun readArgs(args: Array<String>): LoadedArgs {
         val textsToAnalyse = mutableListOf<String>()
 
