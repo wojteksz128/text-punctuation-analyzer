@@ -9,6 +9,7 @@ import net.wojteksz128.tpa.polish.validator.comma.CommaBetweenTheSameWordClass
 import net.wojteksz128.tpa.polish.validator.dot.DotAtSentenceEndValidator
 import net.wojteksz128.tpa.polish.validator.dot.DotAtTheEndOfShortcutValidator
 import net.wojteksz128.tpa.polish.validator.prepare.SentenceGroupValidatorPreparer
+import net.wojteksz128.tpa.polish.validator.semicolon.SemicolonBetweenSimpleSentencesValidator
 import net.wojteksz128.tpa.text.split.DefaultTextDividerImpl
 
 fun TextPunctuationAnalyzer.Companion.polishTextPunctuationAnalyzer(): TextPunctuationAnalyzer =
@@ -21,7 +22,8 @@ fun TextPunctuationAnalyzer.Companion.polishTextPunctuationAnalyzer(): TextPunct
                 DotAtTheEndOfShortcutValidator,
                 CommaAsSentencesSeparatorValidator,
                 CommaAsSentenceSeparatorValidator,
-                CommaBetweenTheSameWordClass
+                CommaBetweenTheSameWordClass,
+                SemicolonBetweenSimpleSentencesValidator
             )
         )
         .build()
