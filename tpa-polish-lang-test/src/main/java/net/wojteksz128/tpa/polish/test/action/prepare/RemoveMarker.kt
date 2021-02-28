@@ -3,7 +3,7 @@ package net.wojteksz128.tpa.polish.test.action.prepare
 import net.wojteksz128.tpa.text.ChangeType
 import net.wojteksz128.tpa.text.PossibleChange
 
-data class RemoveMarker(val changeFromOriginal: PossibleChange, val removedEarlier: Int) {
+data class RemoveMarker(val changeFromOriginal: PossibleChange, val removedEarlier: Int, val toRemove: Boolean = true) {
     val changeAfterRemove: PossibleChange
         get() = PossibleChange(changeType, position - removedEarlier, old, new)
 

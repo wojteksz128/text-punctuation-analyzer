@@ -11,7 +11,7 @@ import java.io.File
 import kotlin.random.Random
 
 class PrepareAction : Action {
-    private val pattern = Regex("(\\. \\w|\\.|,|;)")
+    private val pattern = Regex("(\\. \\w|\\.|,|;|[^.,;] )")
 
     override fun execute(loadedArgs: LoadedArgs) {
         val map = loadedArgs.texts.map { splitTextIntoTextWithErrorsAndErrorsSolutions(it) }.toMap()
@@ -26,15 +26,26 @@ class PrepareAction : Action {
                 it.value.startsWith(".") -> prepareDotErrorFor(it, removedFromEarlier)
                 it.value.startsWith(",") -> prepareCommaErrorFor(it, removedFromEarlier)
                 it.value.startsWith(";") -> prepareSemicolonErrorFor(it, removedFromEarlier)
-                else -> Pair<RemoveMarker?, Int>(null, 0)
+                else -> Pair<RemoveMarker?, Int>(
+                    RemoveMarker(
+                        PossibleChange(ChangeType.DELETE, it.range.last, " "),
+                        removedFromEarlier,
+                        false
+                    ), 0
+                )
             }
             removedFromEarlier += removedChar
             removeMarker
         }.toList()
         val brokenText = applyReverseErrors(text, removeMarkers)
+        val (brokenSolution, spaces) = removeMarkers.partition { it.toRemove }
         return Pair(
             brokenText,
-            TextSolution(generateTextId(brokenText), removeMarkers.map { it.changeAfterRemove }.toList())
+            TextSolution(
+                generateTextId(brokenText),
+                brokenSolution.map { it.changeAfterRemove }.toList(),
+                spaces.map { it.changeAfterRemove.position }.toSet()
+            )
         )
     }
 
@@ -70,14 +81,13 @@ class PrepareAction : Action {
         val brokenText = StringBuilder(text)
 
         removeMarkers.sortedByDescending { it.position }.forEach {
-            when (it.changeType) {
-                ChangeType.INSERT -> brokenText.delete(it.position, it.position + it.new!!.length)
-                ChangeType.REPLACE -> {
-                    brokenText.delete(it.position, it.position + it.new!!.length).insert(it.position, it.old)
+            when {
+                !it.toRemove -> {
                 }
-                ChangeType.DELETE -> {
-                    brokenText.insert(it.position, it.old)
-                }
+                ChangeType.INSERT == it.changeType -> brokenText.delete(it.position, it.position + it.new!!.length)
+                ChangeType.REPLACE == it.changeType -> brokenText.delete(it.position, it.position + it.new!!.length)
+                    .insert(it.position, it.old)
+                ChangeType.DELETE == it.changeType -> brokenText.insert(it.position, it.old)
             }
         }
 

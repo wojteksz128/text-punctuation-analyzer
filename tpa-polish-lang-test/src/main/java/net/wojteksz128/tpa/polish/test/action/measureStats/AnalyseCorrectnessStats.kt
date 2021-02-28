@@ -72,7 +72,8 @@ data class AnalyseCorrectnessStats(
 
         @ExperimentalStdlibApi
         fun build(): AnalyseCorrectnessStats {
-            val correctChangeSize = actualChangesMap.mapNotNull { it.value[it.key]?.size }.sum()
+            val correctChangeSize =
+                actualChangesMap.filter { it.key != Symbol.NONE }.mapNotNull { it.value[it.key]?.size }.sum()
             val requiredChangesSize = expectedChangesMap.mapNotNull { (_, list) -> list.size }.sum()
 
             val wrongChangeSize = actualChangesMap[Symbol.NONE]?.map { (_, list) -> list.size }?.sum() ?: 0

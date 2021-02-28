@@ -60,16 +60,18 @@ class StatsCalculator {
         expectedWithActualText: ConnectedExpectedWithActual<TextSolution, TextAnalyzeResultDto>
     ): AnalyseCorrectnessStats {
         val statsBuilder = AnalyseCorrectnessStats.Builder()
-        fillExpectedChangesMap(expectedWithActualText, statsBuilder)
-        fillActualChangesMap(expectedWithActualSolutions, statsBuilder)
+        fillExpectedChangesMap(statsBuilder, expectedWithActualText)
+        fillActualChangesMap(statsBuilder, expectedWithActualSolutions, expectedWithActualText)
 
         return statsBuilder.build()
     }
 
     private fun fillActualChangesMap(
+        statsBuilder: AnalyseCorrectnessStats.Builder,
         expectedWithActualSolutions: MutableMap<Int, ConnectedExpectedWithActual<PossibleChange?, MutableSet<PossibleChange>>>,
-        statsBuilder: AnalyseCorrectnessStats.Builder
+        expectedWithActualText: ConnectedExpectedWithActual<TextSolution, TextAnalyzeResultDto>
     ) {
+        val spaces = expectedWithActualText.expected.spaces.toMutableSet()
         expectedWithActualSolutions.forEach { (_, expectedWithActual) ->
             val expectedSymbol = getChangeSymbol(expectedWithActual.expected)
             val actual = if (expectedWithActual.actual.isNullOrEmpty())
@@ -80,13 +82,20 @@ class StatsCalculator {
                 statsBuilder.actualChangesMap.putIfAbsent(expectedSymbol, mutableMapOf())
                 statsBuilder.actualChangesMap[expectedSymbol]?.putIfAbsent(actualSymbol, mutableSetOf())
                 statsBuilder.actualChangesMap[expectedSymbol]?.get(actualSymbol)?.add(it)
+                spaces.remove(it.position)
             }
+        }
+        spaces.forEach {
+            statsBuilder.actualChangesMap.putIfAbsent(Symbol.NONE, mutableMapOf())
+            statsBuilder.actualChangesMap[Symbol.NONE]?.putIfAbsent(Symbol.NONE, mutableSetOf())
+            statsBuilder.actualChangesMap[Symbol.NONE]?.get(Symbol.NONE)
+                ?.add(PossibleChange(ChangeType.DELETE, it, " "))
         }
     }
 
     private fun fillExpectedChangesMap(
-        expectedWithActualText: ConnectedExpectedWithActual<TextSolution, TextAnalyzeResultDto>,
-        statsBuilder: AnalyseCorrectnessStats.Builder
+        statsBuilder: AnalyseCorrectnessStats.Builder,
+        expectedWithActualText: ConnectedExpectedWithActual<TextSolution, TextAnalyzeResultDto>
     ) {
         expectedWithActualText.expected.solution.forEach {
             statsBuilder.expectedChangesMap.putIfAbsent(getChangeSymbol(it), mutableSetOf())
