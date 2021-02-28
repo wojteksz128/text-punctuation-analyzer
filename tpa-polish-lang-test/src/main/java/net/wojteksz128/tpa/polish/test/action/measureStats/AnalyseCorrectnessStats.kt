@@ -69,7 +69,8 @@ data class AnalyseCorrectnessStats(
     fun calculateF1Score(symbol: Symbol): Double {
         val precision = calculatePrecision(symbol)
         val recall = calculateRecall(symbol)
-        return 2 * precision * recall / (precision + recall)
+        val f1Score = 2 * precision * recall / (precision + recall)
+        return if (f1Score.isNaN()) 0.0 else f1Score
     }
 
     class Builder {
@@ -82,7 +83,9 @@ data class AnalyseCorrectnessStats(
                 actualChangesMap.filter { it.key != Symbol.NONE }.mapNotNull { it.value[it.key]?.size }.sum()
             val requiredChangesSize = expectedChangesMap.mapNotNull { (_, list) -> list.size }.sum()
 
-            val wrongChangeSize = actualChangesMap[Symbol.NONE]?.map { (_, list) -> list.size }?.sum() ?: 0
+            val wrongChangeSize =
+                actualChangesMap[Symbol.NONE]?.filterNot { it.key == Symbol.NONE }?.map { (_, list) -> list.size }
+                    ?.sum() ?: 0
 
             val wrongSignInCorrectPlaceSize = actualChangesMap.filterNot { it.key == Symbol.NONE }
                 .mapNotNull { (symbol, map) ->
