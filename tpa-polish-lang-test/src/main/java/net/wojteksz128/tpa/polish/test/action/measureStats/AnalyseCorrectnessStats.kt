@@ -13,6 +13,33 @@ data class AnalyseCorrectnessStats(
     val correctnessPercent: Double
         get() = correctChangeSize.toDouble() / requiredChangesSize
 
+    private val calculatedPrecisionValues = mutableMapOf<Symbol, Double>()
+    private val calculatedRecallValues = mutableMapOf<Symbol, Double>()
+
+    fun calculatePrecision(symbol: Symbol): Double {
+        if (!calculatedPrecisionValues.containsKey(symbol)) {
+            val truePositiveNo = actualChangesNoInExpectedCharsMap[symbol]?.get(symbol)?.toDouble() ?: 0.0
+            val sumOfSymbolAssignments =
+                Symbol.values().map { actualChangesNoInExpectedCharsMap[it]?.get(symbol)?.toDouble() ?: 0.0 }.sum()
+
+            calculatedPrecisionValues[symbol] =
+                if (sumOfSymbolAssignments == 0.0) 0.0 else truePositiveNo / sumOfSymbolAssignments
+        }
+        return calculatedPrecisionValues[symbol]!!
+    }
+
+    fun calculateRecall(symbol: Symbol): Double {
+        if (!calculatedRecallValues.containsKey(symbol)) {
+            val truePositiveNo = actualChangesNoInExpectedCharsMap[symbol]?.get(symbol)?.toDouble() ?: 0.0
+            val sumOfExpectedSymbolAssignments =
+                actualChangesNoInExpectedCharsMap[symbol]?.map { it.value }?.sum()?.toDouble() ?: 0.0
+
+            calculatedRecallValues[symbol] =
+                if (sumOfExpectedSymbolAssignments == 0.0) 0.0 else truePositiveNo / sumOfExpectedSymbolAssignments
+        }
+        return calculatedRecallValues[symbol]!!
+    }
+
     operator fun plus(other: AnalyseCorrectnessStats): AnalyseCorrectnessStats {
         val correctChangeSize = this.correctChangeSize + other.correctChangeSize
         val requiredChangesSize = this.requiredChangesSize + other.requiredChangesSize

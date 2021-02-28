@@ -74,7 +74,17 @@ ${
             }
         }
 
-
+Miara klas klasyfikatorów:
+$TAB${
+            Symbol.values()
+                .joinToString("\n\t") {
+                    "Znak '${it.char}':\t\tprecision: ${analyseStats.calculatePrecision(it)}\n$TAB        \t\trecall:    ${
+                        analyseStats.calculateRecall(
+                            it
+                        )
+                    }"
+                }
+        }
 
 
 
