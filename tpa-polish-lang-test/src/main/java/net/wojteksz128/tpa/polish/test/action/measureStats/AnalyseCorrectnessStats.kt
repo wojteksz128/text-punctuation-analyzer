@@ -66,6 +66,12 @@ data class AnalyseCorrectnessStats(
     private fun sumElementsOf(firstMap: Map<Symbol, Int>, secondMap: Map<Symbol, Int>) =
         Symbol.values().map { it to (firstMap[it] ?: 0) + (secondMap[it] ?: 0) }.toMap()
 
+    fun calculateF1Score(symbol: Symbol): Double {
+        val precision = calculatePrecision(symbol)
+        val recall = calculateRecall(symbol)
+        return 2 * precision * recall / (precision + recall)
+    }
+
     class Builder {
         val expectedChangesMap = mutableMapOf<Symbol, MutableSet<PossibleChange>>()
         val actualChangesMap = mutableMapOf<Symbol, MutableMap<Symbol, MutableSet<PossibleChange>>>()

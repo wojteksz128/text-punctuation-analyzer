@@ -78,13 +78,16 @@ Miara klas klasyfikatorów:
 $TAB${
             Symbol.values()
                 .joinToString("\n\t") {
-                    "Znak '${it.char}':\t\tprecision: ${analyseStats.calculatePrecision(it)}\n$TAB        \t\trecall:    ${
-                        analyseStats.calculateRecall(
-                            it
-                        )
-                    }"
+                    "Znak '${it.char}':\t\tprecision: ${analyseStats.calculatePrecision(it)}\n" +
+                            "$TAB        \t\trecall:    ${analyseStats.calculateRecall(it)}\n" +
+                            "$TAB        \t\tf1 score:  ${analyseStats.calculateF1Score(it)}\n"
                 }
         }
+        
+Makro F1 (średnia arytmetyczna):
+${TAB}precision: ${Symbol.values().map { analyseStats.calculatePrecision(it) }.average()}
+${TAB}recall:    ${Symbol.values().map { analyseStats.calculateRecall(it) }.average()}
+${TAB}f1 score:  ${Symbol.values().map { analyseStats.calculateF1Score(it) }.average()}
 """)
     }
 
