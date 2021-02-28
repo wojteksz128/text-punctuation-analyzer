@@ -1,12 +1,17 @@
 package net.wojteksz128.tpa.text.split
 
-import net.wojteksz128.tpa.language.TestLanguageAlphabet
+import net.wojteksz128.tpa.language.LanguageAlphabetLoader
 import net.wojteksz128.tpa.text.*
+import net.wojteksz128.tpa.text.part.PunctuationMark
+import net.wojteksz128.tpa.text.part.Separator
+import net.wojteksz128.tpa.text.part.TextPart
+import net.wojteksz128.tpa.text.part.Word
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
+@Suppress("SpellCheckingInspection")
 internal class DefaultTextDividerImplTest {
-    private val languageAlphabet = TestLanguageAlphabet()
+    private val languageAlphabet = LanguageAlphabetLoader.load(DefaultTextDividerImplTest::class.java.getResourceAsStream("/test_lang.json"))
     private val textSplitter: TextDivider = DefaultTextDividerImpl(languageAlphabet)
 
     @Test
@@ -70,6 +75,6 @@ internal class DefaultTextDividerImplTest {
 
     private inline fun <reified T> thenPartIs(first: TextPart, second: TestTextPart) {
         Assertions.assertTrue { first is T }
-        Assertions.assertEquals(first.get(), second.getText())
+        Assertions.assertEquals(first.text, second.getText())
     }
 }

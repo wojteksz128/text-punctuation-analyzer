@@ -1,0 +1,47 @@
+[
+  {
+    "text": "Idę.",
+    "expected": [
+      {
+        "items": [
+          "Idę"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Idę spać.",
+    "expected": [
+      {
+        "items": [
+          "Idę",
+          "spać"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Idzie Paweł.",
+    "expected": [
+      {
+        "items": [
+          "Idzie",
+          "Paweł"
+        ]
+      }
+    ]
+  },
+  {
+    "text": "Idzie Paweł do domu.",
+    "expected": [
+      {
+        "items": [
+          "Idzie",
+          "Paweł",
+          "do",
+          "domu"
+        ]
+      }
+    ]
+  }
+]

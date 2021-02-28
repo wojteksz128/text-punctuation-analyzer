@@ -6,8 +6,14 @@ class TestText private constructor(private val parts: List<TestTextPart>) {
 
     fun getFullText() = parts.joinToString("") { it.getText() }
     fun getParts() = parts
+
+    @Suppress("unused")
     fun getPartsNo() = parts.size
+
+    @Suppress("unused")
     fun getWordsNo() = parts.filterIsInstance<TestWord>().size
+
+    @Suppress("unused")
     fun getPunctuationsNo() = parts.filterIsInstance<TestPunctuation>().size
 
     data class Builder(private val languageAlphabet: LanguageAlphabet, private val parts: MutableList<TestTextPart> = mutableListOf()) {
@@ -15,7 +21,7 @@ class TestText private constructor(private val parts: List<TestTextPart>) {
         fun build() = TestText(parts.toList())
         fun word(word: String) = apply {
             if (parts.lastOrNull() is TestWord || parts.lastOrNull() is TestPunctuation)
-                parts += TestSeparator(languageAlphabet.getSeparator())
+                parts += TestSeparator(languageAlphabet.separators.first())
             parts += TestWord(word)
         }
 

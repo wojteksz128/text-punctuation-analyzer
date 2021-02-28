@@ -1,0 +1,12 @@
+text,position
+Idę,[3]
+Ala idzie,[9]
+Idzie Ala,[9]
+Ala ma kota,[11]
+Ala ma bardzo małego kota,[25]
+Chodź. Idziemy,[14]
+Chodź Idziemy.,[5]
+Chodź Idziemy,"[5,13]"
+Ala ma kota Kot ma Alę.,[11]
+Ala ma kota. Kot ma Alę,[23]
+Ala ma kota Kot ma Alę,"[11,22]"
